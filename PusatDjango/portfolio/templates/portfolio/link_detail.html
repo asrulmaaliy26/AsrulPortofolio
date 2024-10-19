@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Link Detail</h1>
+<p><strong>Name:</strong> {{ link.nama }}</p>
+<p><strong>Link:</strong> <a href="{{ link.link }}">{{ link.link }}</a></p>
+<p><strong>Additional Info:</strong> {{ link.content }}</p>
+<a href="{% url 'portfolio:link_edit' link.pk %}">Edit</a>
+<a href="{% url 'portfolio:link_list' %}">Back to List</a>
+{% endblock %}

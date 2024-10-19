@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Skill List</h1>
+<a href="{% url 'portfolio:skill_create' %}">Add New Skill</a>
+<ul>
+    {% include "portfolio/navbar.html" %}
+    {% for skill in skills %}
+    <li>
+        <a href="{% url 'portfolio:skill_detail' skill.pk %}">{{ skill.nama }}</a>
+        - <a href="{% url 'portfolio:skill_edit' skill.pk %}">Edit</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

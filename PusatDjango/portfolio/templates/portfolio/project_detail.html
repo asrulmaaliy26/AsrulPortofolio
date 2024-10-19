@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Project Detail</h1>
+<p><strong>Name:</strong> {{ project.nama }}</p>
+<p><strong>Image:</strong> <img src="{{ project.image.gambar.url }}" alt="{{ project.image.description }}"></p>
+<p><strong>Link:</strong> <a href="{{ project.link.link }}">{{ project.link.nama }}</a></p>
+<p><strong>Details:</strong> {{ project.content }}</p>
+<p><strong>Location:</strong> {{ project.letak }}</p>
+<a href="{% url 'portfolio:project_edit' project.pk %}">Edit</a>
+<a href="{% url 'portfolio:project_list' %}">Back to List</a>
+{% endblock %}

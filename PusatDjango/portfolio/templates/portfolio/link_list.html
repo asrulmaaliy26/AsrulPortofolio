@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Link List</h1>
+<a href="{% url 'portfolio:link_create' %}">Create New Link</a>
+<ul>
+    {% include "portfolio/navbar.html" %}
+    {% for link in links %}
+    <li>
+        <a href="{% url 'portfolio:link_detail' link.pk %}">{{ link.nama }}</a>
+        - <a href="{% url 'portfolio:link_edit' link.pk %}">Edit</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

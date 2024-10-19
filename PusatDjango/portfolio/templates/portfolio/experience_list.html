@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Experience List</h1>
+<a href="{% url 'portfolio:experience_create' %}">Add New Experience</a>
+<ul>
+    {% include "portfolio/navbar.html" %}
+    {% for experience in experiences %}
+    <li>
+        <a href="{% url 'portfolio:experience_detail' experience.pk %}">{{ experience.nama }}</a>
+        - <a href="{% url 'portfolio:experience_edit' experience.pk %}">Edit</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

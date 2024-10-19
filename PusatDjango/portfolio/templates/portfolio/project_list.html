@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Project List</h1>
+<a href="{% url 'portfolio:project_create' %}">Create New Project</a>
+<ul>
+    {% include "portfolio/navbar.html" %}
+    {% for project in projects %}
+    <li>
+        <a href="{% url 'portfolio:project_detail' project.pk %}">{{ project.nama }}</a>
+        - <a href="{% url 'portfolio:project_edit' project.pk %}">Edit</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

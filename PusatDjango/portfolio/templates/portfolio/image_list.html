@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Image List</h1>
+<a href="{% url 'portfolio:image_create' %}">Upload New Image</a>
+<ul>
+    {% include "portfolio/navbar.html" %}
+    {% for image in images %}
+    <li>
+        <a href="{% url 'portfolio:image_detail' image.pk %}">{{ image.nama }}</a>
+        - <a href="{% url 'portfolio:image_edit' image.pk %}">Edit</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
