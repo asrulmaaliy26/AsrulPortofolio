@@ -5,9 +5,10 @@
 <p><strong>Name:</strong> {{ skill.nama }}</p>
 <p><strong>Percentage:</strong> {{ skill.persentase }}%</p>
 <p><strong>Level:</strong> {{ skill.tingkat }}</p>
-<p><strong>Star Rating:</strong> {{ skill.bintang }}</p>
 <p><strong>Subject:</strong> {{ skill.subjek }}</p>
-<p><strong>Details:</strong> {{ skill.content }}</p>
-<a href="{% url 'portfolio;skill_edit' skill.pk %}">Edit</a>
-<a href="{% url 'portfolio;skill_list' %}">Back to List</a>
+<p><strong>Description:</strong> {{ skill.content }}</p>
+<p><strong>nama gambar :</strong> {{skill.image.nama}}</p>
+<p><strong>link :</strong> {{skill.link.link}}</p>
+<a href="{% url 'portfolio:skill_edit' skill.pk %}">Edit</a>
+<a href="{% url 'portfolio:skill_list' %}">Back to List</a>
 {% endblock %}

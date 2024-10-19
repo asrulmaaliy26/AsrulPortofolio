@@ -2,10 +2,10 @@
 
 {% block content %}
 <h1>{% if form.instance.pk %}Edit Experience{% else %}Add Experience{% endif %}</h1>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Save</button>
+    <a href="{% url 'portfolio:experience_list' %}">Cancel</a>
 </form>
-<a href="{% url 'portfolio:experience_list' %}">Cancel</a>
 {% endblock %}

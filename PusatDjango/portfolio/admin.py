@@ -1,53 +1,49 @@
 from django.contrib import admin
 from .models import Link, Image, Project, Skill, Experience
 
-
-@admin.register(Link)
-class LinkAdmin(admin.ModelAdmin):
-    list_display = ('nama', 'link', 'content')
-    search_fields = ('nama', 'link',)
-    list_filter = ('content',)
-
-
-@admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
     list_display = ('nama', 'gambar', 'description')
-    search_fields = ('nama', 'description',)
+    search_fields = ('nama',)
+    list_filter = ('nama',)
 
+class LinkAdmin(admin.ModelAdmin):
+    list_display = ('nama', 'link')
+    search_fields = ('nama',)
 
-@admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('nama', 'image', 'link', 'letak')
-    search_fields = ('nama', 'content')
+    list_display = ('nama', 'letak', 'image', 'link')
+    search_fields = ('nama', 'letak')
     list_filter = ('image', 'link')
 
-
-@admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
     list_display = ('nama', 'persentase', 'tingkat', 'bintang', 'subjek')
-    search_fields = ('nama', 'subjek', 'content', 'experience')
-    list_filter = ('tingkat',)
+    search_fields = ('nama', 'subjek')
+    list_filter = ('tingkat', 'bintang')
 
-
-@admin.register(Experience)
 class ExperienceAdmin(admin.ModelAdmin):
-    list_display = ('nama', 'subjek', 'instansi', 'periode', 'akhir_periode')
-    search_fields = ('nama', 'subjek', 'instansi', 'content')
-    list_filter = ('instansi',)
+    list_display = ('nama', 'instansi', 'periode', 'akhir_periode')  # Kolom yang ditampilkan di daftar Experience
+    search_fields = ('nama', 'instansi')  # Fitur pencarian di admin
+    list_filter = ('periode', 'instansi')  # Filter berdasarkan periode dan instansi
+    ordering = ('-periode',)  # Pengurutan default berdasarkan periode (terbaru ke terlama)
+    
+    # Mengelompokkan field pada halaman detail
+    fieldsets = (
+        (None, {
+            'fields': ('nama', 'subjek', 'instansi', 'periode', 'akhir_periode', 'content', 'image', 'link')
+        }),
+        ('Related Information', {
+            'fields': ('projects', 'skills'),
+            'classes': ('collapse',),  # Menyembunyikan field terkait di bawah collapsible section
+        }),
+    )
+    
+    # Filter horizontal untuk mempermudah pemilihan banyak project dan skill
+    filter_horizontal = ('projects', 'skills')
 
+admin.site.register(Experience, ExperienceAdmin)
 
-# Jika ingin mengkustomisasi tampilannya lebih lanjut
-# Contoh: menambahkan field tambahan ke form edit
-class ProjectInline(admin.TabularInline):
-    model = Project
-    extra = 1
-
-
-class SkillInline(admin.TabularInline):
-    model = Skill
-    extra = 1
-
-
-class ExperienceInline(admin.TabularInline):
-    model = Experience
-    extra = 1
+# Registering the models with the admin site
+admin.site.register(Link, LinkAdmin)
+admin.site.register(Image, ImageAdmin)
+admin.site.register(Project, ProjectAdmin)
+admin.site.register(Skill, SkillAdmin)

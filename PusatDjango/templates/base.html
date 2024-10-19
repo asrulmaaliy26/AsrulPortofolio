@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Bootstrap Portfolio/Resume Theme for Developers">
     <meta name="author" content="Xiaoying Riley at 3rd Wave Media">
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
 
     <link href='https://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet'
         type='text/css'>
@@ -22,14 +22,14 @@
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.6/css/line.css">
 
     <!-- FontAwesome JS -->
-    <script defer src="{% static 'fontawesome/js/all.js' %}"></script>
+    <script defer src="{% static 'portfolio/fontawesome/js/all.js' %}"></script>
 
     <!-- Global CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- Theme CSS -->
-    <link id="theme-style" rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link id="theme-style" rel="stylesheet" href="{% static 'portfolio/css/styles.css' %}">
 
     <style>
         html,
@@ -70,8 +70,8 @@
     </footer><!--//footer-->
 
     <!-- Javascript -->
-    <script src="{% static 'js/main.js' %}"></script>
-    <script type="text/javascript" src="{% static 'plugins/dark-mode-switch/dark-mode-switch.min.js' %}"></script>
+    <script src="{% static 'portfolio/js/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'portfolio/plugins/dark-mode-switch/dark-mode-switch.min.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>

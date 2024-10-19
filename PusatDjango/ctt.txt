@@ -1,0 +1,76 @@
+mengecek form
+
+fitur cuaca
+
+[upload image serta menghapus image yang lama]
+
+ckeditor pada content artikel
+
+[menyimpan gambar]
+
+[menyimpan link]
+
+ada opsi kompress gambar
+
+chart
+
+table
+
+search engine
+
+prediksi
+
+SPK
+
+grafik
+
+sorting
+
+API
+
+E-commerce
+
+payment
+
+chat app
+
+send email, write email, read email.
+
+middleware custom
+
+kalkulator
+
+BLOG
+
+ADMIN
+
+animate
+
+E-Learning
+
+sistem raport
+
+sistem sekolah
+
+deteksi sidik jari
+
+deteksi wajah
+
+Semua Serba Dinamis
+
+Membedakan admin
+
+sistem poin pondok
+
+
+
+
+
+
+
+
+
+
+
+
+Hacking

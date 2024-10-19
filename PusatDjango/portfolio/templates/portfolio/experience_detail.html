@@ -8,6 +8,10 @@
 <p><strong>Start Date:</strong> {{ experience.periode }}</p>
 <p><strong>End Date:</strong> {{ experience.akhir_periode }}</p>
 <p><strong>Details:</strong> {{ experience.content }}</p>
+<p><strong>nama gambar :</strong> {{experience.image.nama}}</p>
+{% if experience.link %}
+    <p><strong>Link:</strong> <a href="{{ experience.link.link }}">{{ experience.link.link }}</a></p>
+{% endif %}
 <a href="{% url 'portfolio:experience_edit' experience.pk %}">Edit</a>
 <a href="{% url 'portfolio:experience_list' %}">Back to List</a>
 {% endblock %}

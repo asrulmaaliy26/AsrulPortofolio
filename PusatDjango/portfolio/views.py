@@ -46,7 +46,14 @@ def image_list(request):
 @login_required(login_url='/admin')
 def image_detail(request, pk):
     image = get_object_or_404(Image, pk=pk)
-    return render(request, 'portfolio/image_detail.html', {'image': image})
+    
+    if image.gambar:
+        gambar_url = image.gambar.url
+    else:
+        gambar_url = None  # Jika tidak ada gambar, set menjadi None
+
+    return render(request, 'portfolio/image_detail.html', {'image': image, 'gambar_url': gambar_url})
+
 
 @login_required(login_url='/admin')
 def image_create(request):
@@ -62,14 +69,37 @@ def image_create(request):
 @login_required(login_url='/admin')
 def image_edit(request, pk):
     image = get_object_or_404(Image, pk=pk)
+    
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES, instance=image)
         if form.is_valid():
-            form.save()
+            form.save()  # Simpan gambar baru tanpa menghapus gambar lama
             return redirect('portfolio:image_detail', pk=image.pk)
     else:
         form = ImageForm(instance=image)
+    
     return render(request, 'portfolio/image_form.html', {'form': form})
+
+# method jika tidak ada fitur hapus gambar lama di model
+# def image_edit(request, pk):
+#     image = get_object_or_404(Image, pk=pk)
+    
+#     # Simpan path gambar lama untuk penghapusan nanti
+#     old_image_path = image.gambar.path if image.gambar else None
+    
+#     if request.method == 'POST':
+#         form = ImageForm(request.POST, request.FILES, instance=image)
+#         if form.is_valid():
+#             # Jika ada gambar baru yang di-upload, hapus gambar lama
+#             if request.FILES.get('gambar') and old_image_path and os.path.isfile(old_image_path):
+#                 os.remove(old_image_path)  # Hapus gambar lama dari sistem file
+            
+#             form.save()  # Simpan gambar baru
+#             return redirect('portfolio:image_detail', pk=image.pk)
+#     else:
+#         form = ImageForm(instance=image)
+    
+#     return render(request, 'portfolio/image_form.html', {'form': form})
 
 # Project Views
 @login_required(login_url='/admin')
@@ -97,7 +127,7 @@ def project_create(request):
 def project_edit(request, pk):
     project = get_object_or_404(Project, pk=pk)
     if request.method == 'POST':
-        form = ProjectForm(request.POST, instance=project)
+        form = ProjectForm(request.POST, instance=project)  # Include request.FILES for file uploads
         if form.is_valid():
             form.save()
             return redirect('portfolio:project_detail', pk=project.pk)

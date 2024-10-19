@@ -3,7 +3,13 @@
 {% block content %}
 <h1>Image Detail</h1>
 <p><strong>Name:</strong> {{ image.nama }}</p>
-<img src="{{ image.gambar.url }}" alt="{{ image.description }}">
+
+{% if image.gambar %}
+    <img src="{{ image.gambar.url }}" alt="{{ image.description }}">
+{% else %}
+    <p>No image available.</p>
+{% endif %}
+
 <p><strong>Description:</strong> {{ image.description }}</p>
 <a href="{% url 'portfolio:image_edit' image.pk %}">Edit</a>
 <a href="{% url 'portfolio:image_list' %}">Back to List</a>

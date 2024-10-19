@@ -3,10 +3,22 @@
 {% block content %}
 <h1>Project Detail</h1>
 <p><strong>Name:</strong> {{ project.nama }}</p>
-<p><strong>Image:</strong> <img src="{{ project.image.gambar.url }}" alt="{{ project.image.description }}"></p>
-<p><strong>Link:</strong> <a href="{{ project.link.link }}">{{ project.link.nama }}</a></p>
-<p><strong>Details:</strong> {{ project.content }}</p>
+<p><strong>Description:</strong> {{ project.content }}</p>
 <p><strong>Location:</strong> {{ project.letak }}</p>
+
+{% if project.image %}
+    <img src="{{ project.image.gambar.url }}" alt="Project Image">
+{% else %}
+    <p>No image available.</p>
+{% endif %}
+
+<p><strong>Related Link:</strong> <a href="{{ project.link }}">{{ project.link }}</a></p>
+<p><strong>Related Skills:</strong>
+    {% for skill in project.skills.all %}
+        {{ skill }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+</p>
+
 <a href="{% url 'portfolio:project_edit' project.pk %}">Edit</a>
 <a href="{% url 'portfolio:project_list' %}">Back to List</a>
 {% endblock %}
