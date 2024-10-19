@@ -52,9 +52,14 @@ class SkillForm(forms.ModelForm):
             "link",
         ]
         widgets = {
-            "content": forms.Textarea(attrs={"rows": 4, "cols": 40}),
-            "persentase": forms.NumberInput(attrs={"min": 0, "max": 100}),
-            "bintang": forms.NumberInput(attrs={"min": 1, "max": 5}),
+            "nama": forms.TextInput(attrs={"class": "form-control"}),
+            "persentase": forms.NumberInput(attrs={"class": "form-control", "min": 0, "max": 100}),
+            "tingkat": forms.Select(attrs={"class": "form-select"}),
+            "bintang": forms.NumberInput(attrs={"class": "form-control", "min": 1, "max": 5}),
+            "subjek": forms.TextInput(attrs={"class": "form-control"}),
+            "content": forms.Textarea(attrs={"class": "form-control", "rows": 4, "cols": 40}),
+            "image": forms.ClearableFileInput(attrs={"class": "form-control"}),
+            "link": forms.Select(attrs={"class": "form-control"}),
         }
         labels = {
             "nama": "Skill Name",
@@ -65,6 +70,10 @@ class SkillForm(forms.ModelForm):
             "content": "Skill Details",
             "image": "Skill Image",
             "link": "Skill Link",
+        }
+        help_texts = {
+            "persentase": "Enter percentage value between 0 and 100",
+            "bintang": "Enter star rating between 1 and 5",
         }
 
 

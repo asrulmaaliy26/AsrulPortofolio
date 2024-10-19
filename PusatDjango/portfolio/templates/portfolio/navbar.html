@@ -3,10 +3,18 @@
         <a class="navbar-brand mb-3" href="{% url 'index' %}">Portfolio</a>
 
         <!-- Links Section -->
-        <a class="nav-link" href="{% url 'portfolio:link_list' %}">Links</a>
-        <a class="nav-link" href="{% url 'portfolio:image_list' %}">Images</a>
-        <a class="nav-link" href="{% url 'portfolio:project_list' %}">Projects</a>
-        <a class="nav-link" href="{% url 'portfolio:skill_list' %}">Skills</a>
-        <a class="nav-link" href="{% url 'portfolio:experience_list' %}">Experiences</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'link_list' %}active{% endif %}" href="{% url 'portfolio:link_list' %}">Links</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'image_list' %}active{% endif %}" href="{% url 'portfolio:image_list' %}">Images</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'project_list' %}active{% endif %}" href="{% url 'portfolio:project_list' %}">Projects</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'skill_list' %}active{% endif %}" href="{% url 'portfolio:skill_list' %}">Skills</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'experience_list' %}active{% endif %}" href="{% url 'portfolio:experience_list' %}">Experiences</a>
     </div>
 </nav>
+<style>
+    .nav-link.active {
+        font-weight: bold;
+        color: #0d6efd !important; /* Color blue Bootstrap */
+        border-bottom: 2px solid #0d6efd; /* Optional underline for active link */
+    }
+    
+</style>

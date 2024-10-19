@@ -4,11 +4,13 @@ fitur cuaca
 
 [upload image serta menghapus image yang lama]
 
-ckeditor pada content artikel
+[indikator navigasi bar active]
 
 [menyimpan gambar]
 
 [menyimpan link]
+
+ckeditor pada content artikel
 
 ada opsi kompress gambar
 
@@ -40,11 +42,9 @@ middleware custom
 
 kalkulator
 
-BLOG
+BLOG + komen
 
 ADMIN
-
-animate
 
 E-Learning
 

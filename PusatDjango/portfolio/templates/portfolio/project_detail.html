@@ -6,8 +6,8 @@
 <p><strong>Description:</strong> {{ project.content }}</p>
 <p><strong>Location:</strong> {{ project.letak }}</p>
 
-{% if project.image %}
-    <img src="{{ project.image.gambar.url }}" alt="Project Image">
+{% if gambar_url %}
+    <img src="{{ gambar_url }}" alt="{{ project.nama }} Image">
 {% else %}
     <p>No image available.</p>
 {% endif %}

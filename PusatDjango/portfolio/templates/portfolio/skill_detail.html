@@ -8,6 +8,11 @@
 <p><strong>Subject:</strong> {{ skill.subjek }}</p>
 <p><strong>Description:</strong> {{ skill.content }}</p>
 <p><strong>nama gambar :</strong> {{skill.image.nama}}</p>
+{% if gambar_url %}
+    <img src="{{ gambar_url }}" alt="{{ skill.nama }} Image">
+{% else %}
+    <p>No image available.</p>
+{% endif %}
 <p><strong>link :</strong> {{skill.link.link}}</p>
 <a href="{% url 'portfolio:skill_edit' skill.pk %}">Edit</a>
 <a href="{% url 'portfolio:skill_list' %}">Back to List</a>

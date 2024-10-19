@@ -110,7 +110,16 @@ def project_list(request):
 @login_required(login_url='/admin')
 def project_detail(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    return render(request, 'portfolio/project_detail.html', {'project': project})
+    # Mengakses gambar dari relasi ForeignKey dengan Image model
+    if project.image and project.image.gambar:
+        gambar_url = project.image.gambar.url
+    else:
+        gambar_url = None  # Jika gambar tidak ada, set menjadi None
+
+    return render(request, 'portfolio/project_detail.html', {
+        'project': project,
+        'gambar_url': gambar_url
+    })
 
 @login_required(login_url='/admin')
 def project_create(request):
@@ -144,8 +153,16 @@ def skill_list(request):
 @login_required(login_url='/admin')
 def skill_detail(request, pk):
     skill = get_object_or_404(Skill, pk=pk)
-    return render(request, 'portfolio/skill_detail.html', {'skill': skill})
+    if skill.image and skill.image.gambar:
+        gambar_url = skill.image.gambar.url
+    else:
+        gambar_url = None  # Jika gambar tidak ada, set menjadi None
 
+    return render(request, 'portfolio/skill_detail.html', {
+        'skill': skill,
+        'gambar_url': gambar_url
+    })
+    
 @login_required(login_url='/admin')
 def skill_create(request):
     if request.method == 'POST':
