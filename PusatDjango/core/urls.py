@@ -22,6 +22,9 @@ from .views import index, template
 
 urlpatterns = [
     path('portfolio/', include('portfolio.urls', namespace='portfolio')),  # Include portfolio URLs
+    path('blog/', include('blog.urls', namespace='blog')),  # Include portfolio URLs
+    path('fiturapp/', include('fiturapp.urls', namespace='fiturapp')),  # Include portfolio URLs
+    path('skripsi/', include('skripsi.urls', namespace='skripsi')),  # Include portfolio URLs
     path('', index, name='index'),
     path('template', template, name='template'),
     path('admin/', admin.site.urls),

@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'portfolio',
+    'blog',
+    'skripsi',
+    'fiturapp',
+    # 'widget_tweaks', # ini untuk menambahkan class di 
 ]
 
 MIDDLEWARE = [

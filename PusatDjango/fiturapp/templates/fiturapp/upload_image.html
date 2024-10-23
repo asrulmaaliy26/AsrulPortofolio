@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{judul}}</h1>
+        {% include "fiturapp/navbar.html" %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Upload and Compress</button>
+        </form>
+
+        {% if compressed_img %}
+            <h2>Original Size: {{ original_size }} KB</h2>
+            <h2>Compressed Size: {{ compressed_size }} KB</h2>
+
+            <h2>Compressed Image (Preview):</h2>
+            <!-- Gambar dengan ukuran pratinjau, klik untuk membuka modal -->
+            <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal">
+                <img src="data:image/jpeg;base64,{{ compressed_img }}" alt="Compressed Image" style="width: 300px;">
+            </a>
+
+            <h2>Download Compressed Image:</h2>
+            <a class="btn btn-primary" href="data:image/jpeg;base64,{{ compressed_img }}" download="compressed_image.jpg">Download Image</a>
+
+            <!-- Modal Bootstrap untuk melihat detail gambar -->
+            <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="imageModalLabel">Compressed Image Detail</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <!-- Gambar dengan ukuran besar di dalam modal -->
+                            <img src="data:image/jpeg;base64,{{ compressed_img }}" alt="Compressed Image" class="img-fluid">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a class="btn btn-primary" href="data:image/jpeg;base64,{{ compressed_img }}" download="compressed_image.jpg">Download Image</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

@@ -1,8 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-<a class="btn btn-cta-primary" href="{% url 'index' %}"><i
-        class="fas fa-paper-plane"></i></a>
-<a href="{% url 'portfolio:link_list' %}">Portfolio</a>
-<h2>{{ Heading }}</h2>
+<div class="container mt-5">
+        <a class="navbar-brand btn btn-cta-primary m-5" href="{% url 'index' %}">
+                <i class="fas fa-briefcase"></i> Portfolio
+        </a>
+    
+    <div class="row">
+        <!-- Card untuk Portfolio -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Portfolio</h5>
+                    <a href="{% url 'portfolio:link_list' %}" class="btn btn-primary">View Portfolio</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card untuk Blog -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Blog</h5>
+                    <a href="{% url 'blog:index' %}" class="btn btn-primary">Read Blog</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card untuk Fitur App -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Fitur App</h5>
+                    <a href="{% url 'fiturapp:index' %}" class="btn btn-primary">Explore Features</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Skripsi</h5>
+                    <a href="{% url 'skripsi:index' %}" class="btn btn-primary">Prediksi Daya</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="mt-4">{{ Heading }}</h2>
+</div>
 {% endblock content %}
