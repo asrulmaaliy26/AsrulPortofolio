@@ -11,9 +11,7 @@
 {% block content %}
 
 <h1>{{Heading}}</h1>
-<a class="navbar-brand btn btn-cta-primary m-5" href="{% url 'index' %}">
-        <i class="fas fa-briefcase"></i> Portfolio
-</a>
+{% include "navbar.html" %}
     <div class="row">
 
         <div class="col-md-3 mt-5">

@@ -25,6 +25,7 @@ class BaseImage(models.Model):
 class BaseLink(models.Model):
     nama = models.CharField(max_length=255, verbose_name="Link Name")
     link = models.URLField(max_length=255, verbose_name="Link")
+    subjek = models.CharField(null=True, blank=True,max_length=255, verbose_name="Link Subject")
     content = models.TextField(null=True, blank=True, verbose_name="Additional Info")
 
     class Meta:

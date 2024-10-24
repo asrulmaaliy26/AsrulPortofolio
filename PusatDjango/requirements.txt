@@ -1,2 +1,2 @@
-pip install django-widget-tweaks
 pip install pillow
+pip install pikepdf python-docx

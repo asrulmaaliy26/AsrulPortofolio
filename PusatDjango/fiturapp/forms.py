@@ -10,3 +10,7 @@ class ImageUploadForm(forms.Form):
         label='Select Compression Quality (10-100)',
         widget=forms.NumberInput(attrs={'class': 'form-range'})
     )
+
+class FileUploadForm(forms.Form):
+    file = forms.FileField()
+    quality = forms.IntegerField(min_value=1, max_value=100, initial=75)

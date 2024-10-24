@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container">
+    <div class="container m-5">
         <h1>{{judul}}</h1>
         {% include "fiturapp/navbar.html" %}
+        <div class="m-5">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn btn-primary">Upload and Compress</button>
         </form>
 
-        {% if compressed_img %}
+            {% if compressed_img %}
             <h2>Original Size: {{ original_size }} KB</h2>
             <h2>Compressed Size: {{ compressed_size }} KB</h2>
 
@@ -43,5 +44,6 @@
                 </div>
             </div>
         {% endif %}
+        </div>
     </div>
 {% endblock content %}

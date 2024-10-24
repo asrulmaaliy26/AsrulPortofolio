@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .forms import ImageUploadForm
+from .forms import ImageUploadForm, FileUploadForm
 from PIL import Image
+from pikepdf import Pdf
 from io import BytesIO
+from docx import Document
 import base64
 
 def index(request):
@@ -64,3 +66,57 @@ def upload_image(request):
         form = ImageUploadForm()
 
     return render(request, 'fiturapp/upload_image.html', {'form': form, 'judul': judul})
+
+
+#compress PDF
+
+
+
+def compress_pdf(pdf_file):
+    """Fungsi untuk kompresi file PDF"""
+    with Pdf.open(pdf_file) as pdf:
+        compressed_pdf_io = BytesIO()
+        pdf.save(compressed_pdf_io, compress_streams=True)
+        return compressed_pdf_io
+    
+def compress_docx(docx_file):
+    """Fungsi sederhana untuk 'mengompresi' file DOCX dengan mengurangi gambar"""
+    doc = Document(docx_file)
+    compressed_docx_io = BytesIO()
+    doc.save(compressed_docx_io)
+    return compressed_docx_io
+
+def upload_file(request):
+    if request.method == 'POST':
+        form = FileUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            file = form.cleaned_data['file']
+            file_name = file.name.lower()
+
+            compressed_file_io = None
+            original_size_kb = round(file.size / 1024, 2)
+
+            if file_name.endswith('.pdf'):
+                # Kompres PDF
+                compressed_file_io = compress_pdf(file)
+            elif file_name.endswith('.docx'):
+                # 'Kompres' file DOCX
+                compressed_file_io = compress_docx(file)
+
+            if compressed_file_io:
+                compressed_size_kb = round(len(compressed_file_io.getvalue()) / 1024, 2)
+                encoded_file = base64.b64encode(compressed_file_io.getvalue()).decode('utf-8')
+
+                context = {
+                    'form': form,
+                    'compressed_file': encoded_file,
+                    'original_size': original_size_kb,
+                    'compressed_size': compressed_size_kb,
+                    'file_type': file_name.split('.')[-1],  # Mendapatkan ekstensi file
+                }
+                return render(request, 'fiturapp/upload_file.html', context)
+
+    else:
+        form = FileUploadForm()
+
+    return render(request, 'fiturapp/upload_file.html', {'form': form})
