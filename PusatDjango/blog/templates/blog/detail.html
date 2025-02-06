@@ -1,16 +1,12 @@
 {% extends "base.html" %}
 
-{% block head_title %}
-{{Judul}}
-{% endblock head_title %}
-
-{% block title %}
-<h2 class="mt-5 text-success">{{Judul}}</h2>
-{% endblock title %}
-
 {% block content %}
-{% include "navbar.html" %}
-<h1>{{Heading}}</h1>
+
+<div class="container">
+    <h1>{{Heading}}</h1>
+    {% include "blog/navbar.html" %}
+</div>
+<div class="row m-2">
 
 
         <div class="card mt-5">

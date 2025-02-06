@@ -15,6 +15,17 @@ def index(request):
     }
     return render(request, 'blog/index.html', context)
 
+def home(request):
+    articles = Artikel.objects.all()
+    category = Artikel.objects.values('kategori__nama').distinct()
+    context = {
+        'Judul': 'Blog',
+        'Heading': 'Home Blog',
+        'Articles': articles,
+        'Categories': category,
+    }
+    return render(request, 'blog/home.html', context)
+
 
 def kategori_artikel(request, kategoriInput):
     articles = Artikel.objects.filter(kategori__nama=kategoriInput)
