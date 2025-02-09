@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Upload a file (PDF/DOCX) to compress</h1>
+    {% include "fiturapp/navbar.html" %}
+</div>
+<div class="container mt-5">
+    <form class="m-5" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Upload and Compress</button>
+    </form>
+
+    {% if compressed_file %}
+    <h2>Original Size: {{ original_size }} KB</h2>
+    <h2>Compressed Size: {{ compressed_size }} KB</h2>
+
+    <h2>Compressed File:</h2>
+
+    {% if file_type == 'pdf' %}
+    <!-- Tampilkan PDF -->
+    <iframe src="data:application/pdf;base64,{{ compressed_file }}" width="100%" height="500px"></iframe>
+    {% elif file_type == 'docx' %}
+    <!-- Tampilkan link untuk download file DOCX -->
+    <p>DOCX file has been compressed. Click the button below to download:</p>
+    {% endif %}
+
+    <a class="btn btn-primary" href="data:application/{{ file_type }};base64,{{ compressed_file }}"
+        download="compressed_file.{{ file_type|upper }}">
+        Download Compressed {{ file_type|upper }}
+    </a>
+    {% endif %}
+</div>
+{% endblock content %}

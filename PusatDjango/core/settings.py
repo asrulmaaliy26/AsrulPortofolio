@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'blog',
     'skripsi',
     'fiturapp',
+    'fitur.scraping',
+    'fitur.compress',
+    'iotprojek.weather_api',
+    'iotprojek.weather_dashboard'
     # 'widget_tweaks', # ini untuk menambahkan class di 
 ]
 

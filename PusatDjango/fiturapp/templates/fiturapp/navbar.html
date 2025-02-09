@@ -3,12 +3,17 @@
         {% include "navbar.html" %}
 
         <!-- Links Section -->
-        <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'fitruapp:index' %}">index</a>
-        <a class="nav-link {% if request.resolver_match.url_name == 'upload_image' %}active{% endif %}" href="{% url 'fitruapp:upload_image' %}">Compress Image</a>
-        <a class="nav-link {% if request.resolver_match.url_name == 'upload_file' %}active{% endif %}" href="{% url 'fiturapp:upload_file' %}">Compress File</a>
-        {% comment %} <a class="nav-link {% if request.resolver_match.url_name == 'project_list' %}active{% endif %}" href="{% url 'portfolio:project_list' %}">Projects</a> {% endcomment %}
-        {% comment %} <a class="nav-link {% if request.resolver_match.url_name == 'skill_list' %}active{% endif %}" href="{% url 'portfolio:skill_list' %}">Skills</a> {% endcomment %}
-        {% comment %} <a class="nav-link {% if request.resolver_match.url_name == 'experience_list' %}active{% endif %}" href="{% url 'portfolio:experience_list' %}">Experiences</a> {% endcomment %}
+        <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'fiturapp' %}active{% endif %}" href="{% url 'fiturapp:index' %}">Index</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'fiturapp:compress' %}active{% endif %}" href="{% url 'fiturapp:compress:index' %}">Index Compress</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'fiturapp:scraping' %}active{% endif %}" href="{% url 'fiturapp:scraping:index' %}">Index Scraping</a>
+        {% comment %} <a class="nav-link {% if request.resolver_match.url_name == 'upload_image' %}active{% endif %}" href="{% url 'fiturapp:upload_image' %}">Compress Image</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'upload_file' %}active{% endif %}" href="{% url 'fiturapp:upload_file' %}">Compress File</a> {% endcomment %}
+        <a class="nav-link {% if request.resolver_match.url_name == 'example' and request.resolver_match.namespace == 'fiturapp' %}active{% endif %}" href="{% url 'fiturapp:example' %}">Example</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'example' and request.resolver_match.namespace == 'fiturapp:compress' %}active{% endif %}" href="{% url 'fiturapp:compress:example' %}">Example Compress</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'upload_image' and request.resolver_match.namespace == 'fiturapp:compress' %}active{% endif %}" href="{% url 'fiturapp:compress:upload_image' %}">Compress Image</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'upload_file' and request.resolver_match.namespace == 'fiturapp:compress' %}active{% endif %}" href="{% url 'fiturapp:compress:upload_file' %}">Compress File</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'datascrapingbmkg' and request.resolver_match.namespace == 'fiturapp:scraping' %}active{% endif %}" href="{% url 'fiturapp:scraping:datascrapingbmkg' %}">Data Scraping BMKG</a>
+
     </div>
 </nav>
 <style>

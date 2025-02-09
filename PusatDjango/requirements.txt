@@ -1,2 +1,5 @@
-pip install pillow
-pip install pikepdf python-docx
+pillow
+python-docx
+pvlib
+pytz
+pandas

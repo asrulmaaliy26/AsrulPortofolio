@@ -1,10 +1,11 @@
-from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from . import views
 
-app_name = 'fitruapp'
+app_name = 'fiturapp'
 urlpatterns = [
-    path('upload_image/', views.upload_image, name='upload_image'),
-    path('upload_file/', views.upload_file, name='upload_file'),
+    
+    path('compress/', include('fitur.compress.urls', namespace='compress')),
+    path('scraping/', include('fitur.scraping.urls', namespace='scraping')),
+    path('example/', views.ExampleView.as_view(), name='example'),
     path('', views.index, name='index'),
 ]
