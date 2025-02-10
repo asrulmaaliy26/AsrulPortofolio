@@ -7,19 +7,24 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col d-flex align-items-center">
-                <img class="profile-image img-fluid rounded-circle me-3" src="{% static 'portfolio/images/profileku.png' %}"
-                    alt="profile image" id="profileImage" style="cursor: pointer;" data-bs-toggle="modal"
-                    data-bs-target="#imageModal" />
+                <img class="profile-image img-fluid rounded-circle me-3"
+                    src="{% static 'portfolio/images/profileku.png' %}" alt="profile image" id="profileImage"
+                    style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#imageModal" />
                 <div class="profile-content">
                     <h1 class="name">Asrul Maaliy</h1>
-                    <h2 class="desc">Web App Developer &<br><a href="{% url 'template' %}">Cyber Security</a> <--</h2>
-                    <ul class="social list-inline mb-0">
-                        <li class="list-inline-item"><a href="{{twitter_link.link}}"><i class="fab fa-twitter"></i></a></li>
-                        <li class="list-inline-item"><a href="{{linkedin_link.link}}"><i class="fab fa-linkedin-in"></i></a></li>
-                        <li class="list-inline-item"><a href="{{github_link.link}}"><i class="fab fa-github-alt"></i></a></li>
-                        <li class="list-inline-item"><a href="{{instagram_link.link}}"><i class="fab fa-instagram"></i></a></li>
-                        <li class="list-inline-item"><a href="{{facebook_link.link}}"><i class="fab fa-facebook"></i></a></li>
-                    </ul>
+                    <h2 class="desc">Web App Developer &<br><a href="{% url 'template' %}">Cyber Security</a> <--< /h2>
+                            <ul class="social list-inline mb-0">
+                                <li class="list-inline-item"><a href="{{twitter_link.link}}"><i
+                                            class="fab fa-twitter"></i></a></li>
+                                <li class="list-inline-item"><a href="{{linkedin_link.link}}"><i
+                                            class="fab fa-linkedin-in"></i></a></li>
+                                <li class="list-inline-item"><a href="{{github_link.link}}"><i
+                                            class="fab fa-github-alt"></i></a></li>
+                                <li class="list-inline-item"><a href="{{instagram_link.link}}"><i
+                                            class="fab fa-instagram"></i></a></li>
+                                <li class="list-inline-item"><a href="{{facebook_link.link}}"><i
+                                            class="fab fa-facebook"></i></a></li>
+                            </ul>
                 </div><!--//profile-->
             </div><!--//col-->
 
@@ -70,7 +75,7 @@
                     </div><!--//content-->
                 </div><!--//section-inner-->
             </section><!--//section-->
-            
+
             <section class="latest section">
                 <div class="section-inner shadow-sm rounded">
                     <div class="d-flex">
@@ -83,9 +88,10 @@
                         <div class="item featured text-center">
 
                             <div class="featured-image has-ribbon">
-                                <a href="https://github.com/asrulmaaliy26" target="_blank">
+                                <a href="https://admin.maalhidayahkauman.sch.id/" target="_blank">
                                     <img class="img-fluid project-image rounded shadow-sm"
-                                        src="{% static 'portfolio/images/projects/project-1.png' %}" alt="project name" />
+                                        src="{% static 'portfolio/images/projects/adminlpipanel.png' %}"
+                                        alt="project name" />
                                 </a>
                                 <div class="ribbon">
                                     <div class="text">New</div>
@@ -93,37 +99,41 @@
                             </div>
 
                             <h3 class="title mb-3"><a href="https://github.com/asrulmaaliy26" target="_blank">Launch -
-                                    The perfect Bootstrap template for SaaS products</a>
+                                    The perfect Admin System with Laravel</a>
                             </h3>
 
                             <div class="desc text-start">
-                                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi nemo libero reprehenderit id enim ipsum alias rerum corporis quos tempore illo amet iste, nostrum soluta..</p>
+                                <p>Admin LPI panel menyediakan layanan form kunjungan, form pesan dan saran atau aduan,
+                                    form untuk kunjungan sebagai calo wali santri baru dengan jadwal yang dapat
+                                    ditentukan . Dilenkapi Sending Email fitur dan memiliki 3 layer admin dan dilengkapi
+                                    Middleware disetiap layer.</p>
                             </div><!--//desc-->
-                            <a class="btn btn-cta-secondary" href="#" target="_blank"><i class="fas fa-thumbs-up"></i>
+                            <a class="btn btn-cta-secondary" href="https://github.com/asrulmaaliy26?tab=repositories"
+                                target="_blank"><i class="fas fa-thumbs-up"></i>
                                 Back my project</a>
                         </div><!--//item-->
                         <hr class="divider" />
                         {% if projects %}
-                            {% for project in projects %}
-                                <p>
-                                    
+                        {% for project in projects %}
+                        <p>
+
+                        </p>
+                        <div class="item row">
+                            <a class="col-md-4 col-12" href="https://github.com/asrulmaaliy26" target="_blank">
+                                <img class="img-fluid project-image rounded shadow-sm"
+                                    src="media/{{project.image.gambar}}" alt="{{project.nama}}" />
+                            </a>
+                            <div class="desc col-md-8 col-12">
+                                <h3 class="title"><a href="{{project.link.link}}" target="_blank">
+                                        {{project.nama}}
+                                    </a></h3>
+                                <p class="mb-2">{{project.content}}</p>
+                                <p><a class="more-link" href="{{project.link.link}}" target="_blank"><i
+                                            class="fas fa-external-link-alt"></i>Find out more</a>
                                 </p>
-                                <div class="item row">
-                                    <a class="col-md-4 col-12" href="https://github.com/asrulmaaliy26" target="_blank">
-                                        <img class="img-fluid project-image rounded shadow-sm"
-                                            src="media/{{project.image.gambar}}" alt="{{project.nama}}" />
-                                    </a>
-                                    <div class="desc col-md-8 col-12">
-                                        <h3 class="title"><a href="{{project.link.link}}" target="_blank">
-                                            {{project.nama}}
-                                        </a></h3>
-                                        <p class="mb-2">{{project.content}}</p>
-                                        <p><a class="more-link" href="{{project.link.link}}" target="_blank"><i
-                                                    class="fas fa-external-link-alt"></i>Find out more</a>
-                                        </p>
-                                    </div><!--//desc-->
-                                </div><!--//item-->
-                            {% endfor %}
+                            </div><!--//desc-->
+                        </div><!--//item-->
+                        {% endfor %}
                         {% endif %}
 
                     </div><!--//content-->
@@ -139,16 +149,17 @@
                     </div>
                     <div class="content">
                         {% if experiences %}
-                            {% for ex in experiences %}
-                            <div class="item">
-                                <h3 class="title">{{ex.nama}} - <span class="place"><a href="#">{{ex.instansi}}</a></span> <span class="year">({{ex.periode}} - Present)</span></h3>
-                                <p>{{ex.content}}</p>
-                            </div><!--//item-->
-                            {% endfor %}
+                        {% for ex in experiences %}
+                        <div class="item">
+                            <h3 class="title">{{ex.nama}} - <span class="place"><a href="#">{{ex.instansi}}</a></span>
+                                <span class="year">({{ex.periode}} - Present)</span></h3>
+                            <p>{{ex.content}}</p>
+                        </div><!--//item-->
+                        {% endfor %}
                         {% endif %}
                         <div class="item">
-                    </div><!--//content-->
-                </div><!--//section-inner-->
+                        </div><!--//content-->
+                    </div><!--//section-inner-->
             </section><!--//section-->
             <section class="github section">
                 <div class="section-inner shadow-sm rounded">
@@ -166,7 +177,8 @@
                     <h2 class="heading sr-only">Basic Information</h2>
                     <div class="content">
                         <ul class="list-unstyled">
-                            <li><i class="fas fa-map-marker-alt"></i><span class="sr-only">Location:</span>{{alamat.content}}</li>
+                            <li><i class="fas fa-map-marker-alt"></i><span
+                                    class="sr-only">Location:</span>{{alamat.content}}</li>
                             <li><i class="fas fa-envelope"></i><span class="sr-only">Email:</span><a
                                     href="{{email.link}}">{{email.subjek}}</a></li>
                             <li><i class="fas fa-link"></i><span class="sr-only">Website:</span><a
@@ -182,7 +194,7 @@
                         <h2 class="heading">Skills</h2>
                         <i class="edit__about__me uil uil-edit mx-2 mt-1 btn__toast" id="button__toast"
                             onclick="createNotification('error')"></i>
-                    </div>  
+                    </div>
                     <div class="content">
                         <p class="intro">
                             Intro about your skills goes here. Keep the list lean and only show your primary
@@ -191,23 +203,27 @@
 
                         <div class="skillset">
                             {% if pemrograman_skills %}
-                                {% for skill in pemrograman_skills %}
-                                    <div class="item">
-                                        <h3 class="level-title"> {{skill.nama}} <span class="level-label"
-                                                data-bs-toggle="tooltip" data-bs-placement="left"
-                                                data-bs-title="You can use the tooltip to explain more about your skill level..."><i
-                                                    class="fas fa-info-circle"></i>{{skill.tingkat}}</span></h3>
+                            {% for skill in pemrograman_skills %}
+                            <div class="item">
+                                <h3 class="level-title"> {{skill.nama}} <span class="level-label"
+                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                        data-bs-title="You can use the tooltip to explain more about your skill level..."><i
+                                            class="fas fa-info-circle"></i>{{skill.tingkat}}</span></h3>
 
-                                        <div class="level-bar progress">
-                                            <div class="progress-bar level-bar-inner" role="progressbar" style="width: 96%"
-                                                aria-valuenow="96" aria-valuemin="0" aria-valuemax="{{skill.persentase}}"></div>
-                                        </div><!--//level-bar-->
-                                    </div><!--//item-->
-                                {% endfor %}
+                                <div class="level-bar progress">
+                                    <div class="progress-bar level-bar-inner" role="progressbar"
+                                        style="width: {{ skill.persentase }}%;" aria-valuenow="{{ skill.persentase }}"
+                                        aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div><!--//level-bar-->
+
+                            </div><!--//item-->
+                            {% endfor %}
                             {% else %}
-                                <p>Tidak ada link dengan nama 'twitter'.</p>
+                            <p>Tidak ada link dengan nama 'twitter'.</p>
                             {% endif %}
-                            <p><a class="more-link" href="{{github_link.link}}"><i class="fas fa-external-link-alt"></i>More on
+                            <p><a class="more-link" href="{{github_link.link}}"><i
+                                        class="fas fa-external-link-alt"></i>More on
                                     GitHub</a></p>
                         </div>
                     </div><!--//content-->
@@ -231,7 +247,8 @@
                                 <p class="source"><span class="name">Tim Adams</span><br /><span class="title">Curabitur commodo</span></p>                                                             
                             </div> -->
 
-                        <p><a class="more-link" href="{{linkedin_link.link}}"><i class="fas fa-external-link-alt"></i>More on
+                        <p><a class="more-link" href="{{linkedin_link.link}}"><i
+                                    class="fas fa-external-link-alt"></i>More on
                                 Linkedin</a></p>
 
                     </div>
@@ -276,7 +293,7 @@
                             onclick="createNotification('error')"></i>
                     </div>
                     <div class="content">
-                        
+
                         {% if bahasa_skills %}
                         <ul class="list-unstyled">
                             {% for skill in bahasa_skills %}
@@ -287,13 +304,13 @@
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
-                                 </span>
+                                </span>
                             </li><!--//item-->
                             {% endfor %}
                         </ul>
-                        
+
                         {% else %}
-                            <p>Tidak ada link dengan nama 'twitter'.</p>
+                        <p>Tidak ada link dengan nama 'twitter'.</p>
                         {% endif %}
                     </div><!--//content-->
                 </div><!--//section-inner-->
@@ -307,9 +324,9 @@
                             onclick="createNotification('error')"></i>
                     </div>
                     {% if articles %}
-                        {% for artikel in articles %}
-                        <p><a href="{% url 'blog:detail_artikel' artikel.slug_art %}">{{artikel.judul}}</a></p>
-                        {% endfor %}
+                    {% for artikel in articles %}
+                    <p><a href="{% url 'blog:detail_artikel' artikel.slug_art %}">{{artikel.judul}}</a></p>
+                    {% endfor %}
                     {% endif %}
                     <div id="rss-feeds" class="content">
 
@@ -337,8 +354,8 @@
                         <p>Follow <a href="{{twitter_link.link}}" target="_blank">Asrul Maaliy</a> on
                             twitter so you don't miss any future freebies!</p>
 
-                        <a class="btn btn-cta-secondary btn-follow" href="{{twitter_link.link}}"
-                            target="_blank"><i class="fab fa-twitter"></i> Follow on twitter</a>
+                        <a class="btn btn-cta-secondary btn-follow" href="{{twitter_link.link}}" target="_blank"><i
+                                class="fab fa-twitter"></i> Follow on twitter</a>
 
                     </div><!--//content-->
                 </div><!--//section-inner-->

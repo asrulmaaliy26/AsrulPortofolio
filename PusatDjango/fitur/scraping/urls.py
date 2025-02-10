@@ -4,6 +4,6 @@ from . import views
 app_name = 'scraping'
 urlpatterns = [
     path('', views.index, name='index'),
-    path('datascrapingbmkg', views.datascrapingbmkg, name='datascrapingbmkg'),
+    path('scrapingbmkg', views.scrapingbmkg, name='scrapingbmkg'),
 ]
 

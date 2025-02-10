@@ -1,64 +1,52 @@
-{% extends "base.html" %}
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% else %}
+<!-- Tab Navigation -->
+<ul class="nav nav-tabs" id="cuacaTab" role="tablist">
+    {% for tanggal in cuaca_dict.keys %}
+    <li class="nav-item" role="presentation">
+        <button class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.counter }}"
+            data-bs-toggle="tab" data-bs-target="#content-{{ forloop.counter }}" type="button" role="tab">
+            {{ tanggal }}
+        </button>
+    </li>
+    {% endfor %}
+</ul>
 
-{% block content %}
-<div class="container">
-    <h1>Data API BMKG Kota Sukun</h1>
-    {% include "fiturapp/navbar.html" %}
-</div>
-<div class="container mt-5">
-
-    {% if error %}
-    <div class="alert alert-danger">{{ error }}</div>
-    {% else %}
-    <!-- Tab Navigation -->
-    <ul class="nav nav-tabs" id="cuacaTab" role="tablist">
-        {% for tanggal in cuaca_dict.keys %}
-        <li class="nav-item" role="presentation">
-            <button class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.counter }}"
-                data-bs-toggle="tab" data-bs-target="#content-{{ forloop.counter }}" type="button" role="tab">
-                {{ tanggal }}
-            </button>
-        </li>
-        {% endfor %}
-    </ul>
-
-    <!-- Tab Content -->
-    <div class="tab-content mt-3">
-        {% for tanggal, cuaca_list in cuaca_dict.items %}
-        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="content-{{ forloop.counter }}"
-            role="tabpanel">
-            <table class="table table-bordered table-striped">
-                <thead class="table-primary">
-                    <tr>
-                        <th>Waktu</th>
-                        <th>Suhu (°C)</th>
-                        <th>Kelembapan (%)</th>
-                        <th>Kecepatan Angin (km/h)</th>
-                        <th>Arah Angin</th>
-                        <th>Deskripsi Cuaca</th>
-                        <th>Elevasi Matahari (°)</th>
-                        <th>Azimut Matahari (°)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for cuaca in cuaca_list %}
-                    <tr>
-                        <td>{{ cuaca.waktu }}</td>
-                        <td>{{ cuaca.suhu }}</td>
-                        <td>{{ cuaca.kelembapan }}</td>
-                        <td>{{ cuaca.kecepatan_angin }}</td>
-                        <td>{{ cuaca.arah_angin }}</td>
-                        <td>{{ cuaca.deskripsi_cuaca }}</td>
-                        <td>{{ cuaca.elevasi_matahari|floatformat:2 }}</td>
-                        <td>{{ cuaca.azimut_matahari|floatformat:2 }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endfor %}
+<!-- Tab Content -->
+<div class="tab-content mt-3">
+    {% for tanggal, cuaca_list in cuaca_dict.items %}
+    <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="content-{{ forloop.counter }}"
+        role="tabpanel">
+        <table class="table table-bordered table-striped">
+            <thead class="table-primary">
+                <tr>
+                    <th>Waktu</th>
+                    <th>Suhu (°C)</th>
+                    <th>Kelembapan (%)</th>
+                    <th>Kecepatan Angin (km/h)</th>
+                    <th>Arah Angin</th>
+                    <th>Deskripsi Cuaca</th>
+                    <th>Elevasi Matahari (°)</th>
+                    <th>Azimut Matahari (°)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cuaca in cuaca_list %}
+                <tr>
+                    <td>{{ cuaca.waktu }}</td>
+                    <td>{{ cuaca.suhu }}</td>
+                    <td>{{ cuaca.kelembapan }}</td>
+                    <td>{{ cuaca.kecepatan_angin }}</td>
+                    <td>{{ cuaca.arah_angin }}</td>
+                    <td>{{ cuaca.deskripsi_cuaca }}</td>
+                    <td>{{ cuaca.elevasi_matahari|floatformat:2 }}</td>
+                    <td>{{ cuaca.azimut_matahari|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    {% endif %}
+    {% endfor %}
 </div>
-
-{% endblock content %}
+{% endif %}

@@ -9,18 +9,16 @@ from django.shortcuts import render
 def index(request):
     return render(request, 'scraping/index.html')
 
-def datascrapingbmkg(request):
-     # Lokasi geografis: Sukun, Malang, Jawa Timur
-    latitude = -8.106735
-    longitude = 112.027246
+LATITUDE = -8.106735
+LONGITUDE = 112.027246
 
-    # Mengambil data dari API BMKG
+def get_bmkg_data(request=None):
+    """Mengambil dan memproses data cuaca dari API BMKG"""
     url = "https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=35.04.11.2011"
     response = requests.get(url)
-    
-    # Pastikan response sukses
+
     if response.status_code != 200:
-        return render(request, 'scraping/datascrapingbmkg.html', {'error': 'Gagal mengambil data cuaca dari BMKG'})
+        return {'error': 'Gagal mengambil data cuaca dari BMKG'}
 
     data = response.json()
     cuaca_data = data.get('data', [])[0].get('cuaca', [])
@@ -31,8 +29,6 @@ def datascrapingbmkg(request):
         for weather in entry:
             # Konversi dari format ISO 8601 ke datetime Python
             utc_time = datetime.strptime(weather['datetime'], "%Y-%m-%dT%H:%M:%SZ")
-
-            # Konversi ke zona waktu Asia/Jakarta
             local_time = utc_time.replace(tzinfo=pytz.utc).astimezone(pytz.timezone('Asia/Jakarta'))
 
             # Format tanggal dan waktu untuk tampilan
@@ -40,7 +36,7 @@ def datascrapingbmkg(request):
             waktu = local_time.strftime("%H:%M")
 
             # Hitung posisi matahari
-            solar_position = pvlib.solarposition.get_solarposition(local_time, latitude, longitude)
+            solar_position = pvlib.solarposition.get_solarposition(local_time, LATITUDE, LONGITUDE)
             elevation = solar_position['elevation'].iloc[0]
             azimuth = solar_position['azimuth'].iloc[0]
 
@@ -59,5 +55,14 @@ def datascrapingbmkg(request):
                 'azimut_matahari': azimuth
             })
 
-    # Kirim data ke template
-    return render(request, 'scraping/datascrapingbmkg.html', {'cuaca_dict': cuaca_dict})
+    return {'cuaca_dict': cuaca_dict}
+
+def scrapingbmkg(request):
+    """View untuk menampilkan data cuaca BMKG"""
+    cuaca_dict = get_bmkg_data()
+    
+    # Cek jika terjadi error saat mengambil data
+    if 'error' in cuaca_dict:
+        return render(request, 'scraping/scrapingbmkg.html', {'error': cuaca_dict['error']})
+
+    return render(request, 'scraping/scrapingbmkg.html', cuaca_dict)
