@@ -4,3 +4,5 @@ pvlib
 pytz
 pandas
 djangorestframework
+openpyxl
+pywin32

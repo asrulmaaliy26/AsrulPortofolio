@@ -1,0 +1,18 @@
+{% include "fiturapp/navbar.html" %}
+
+    {% block additional_links %}
+    <nav class="navbar navbar-light bg-light">
+        <div class="d-flex flex-column">
+            <a class="nav-link {% if request.resolver_match.url_name == 'upload_image' and request.resolver_match.namespace == 'fiturapp:compress' %}active{% endif %}" href="{% url 'fiturapp:compress:upload_image' %}">Compress Image</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'upload_file' and request.resolver_match.namespace == 'fiturapp:compress' %}active{% endif %}" href="{% url 'fiturapp:compress:upload_file' %}">Compress File Docs & PDF</a>
+        </div>
+    </nav>
+    <style>
+        .nav-link.active {
+            font-weight: bold;
+            color: #0d6efd !important; /* Color blue Bootstrap */
+            border-bottom: 2px solid #0d6efd; /* Optional underline for active link */
+        }
+        
+    </style>
+{% endblock additional_links %}

@@ -7,11 +7,7 @@
         <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'fiturapp:compress' %}active{% endif %}" href="{% url 'fiturapp:compress:index' %}">Index Compress</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'fiturapp:scraping' %}active{% endif %}" href="{% url 'fiturapp:scraping:index' %}">Index Scraping</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'fiturapp:uploadapp' %}active{% endif %}" href="{% url 'fiturapp:uploadapp:index' %}">Index UploadApp</a>
-        <a class="nav-link {% if request.resolver_match.url_name == 'upload_image' and request.resolver_match.namespace == 'fiturapp:compress' %}active{% endif %}" href="{% url 'fiturapp:compress:upload_image' %}">Compress Image</a>
-        <a class="nav-link {% if request.resolver_match.url_name == 'upload_file' and request.resolver_match.namespace == 'fiturapp:compress' %}active{% endif %}" href="{% url 'fiturapp:compress:upload_file' %}">Compress File Docs & PDF</a>
-        <a class="nav-link {% if request.resolver_match.url_name == 'scrapingbmkg' and request.resolver_match.namespace == 'fiturapp:scraping' %}active{% endif %}" href="{% url 'fiturapp:scraping:scrapingbmkg' %}">Scraping BMKG</a>
         {% block additional_links %}{% endblock %}
-
     </div>
 </nav>
 <style>

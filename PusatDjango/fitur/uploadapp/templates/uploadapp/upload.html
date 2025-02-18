@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Fitur Upload App</h1>
+    {% include "uploadapp/navbar.html" %}
+</div>
+<div class="container mt-5">
+    <h2>Upload File Excel atau Word</h2>
+    
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="file">
+        <button type="submit">Upload</button>
+    </form>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</div>
+
+{% endblock content %}
