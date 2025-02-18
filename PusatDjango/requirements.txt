@@ -1,5 +1,6 @@
-pillow
+Pillow
 python-docx
 pvlib
 pytz
 pandas
+djangorestframework

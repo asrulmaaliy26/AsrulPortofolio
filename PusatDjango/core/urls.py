@@ -23,6 +23,7 @@ from .views import index, template
 urlpatterns = [
     path('blog/', include('blog.urls', namespace='blog')),
     path('fiturapp/', include('fiturapp.urls', namespace='fiturapp')),
+    path('iot/', include('iot.urls', namespace='iot')),
     path('portfolio/', include('portfolio.urls', namespace='portfolio')),
     path('skripsi/', include('skripsi.urls', namespace='skripsi')),
     

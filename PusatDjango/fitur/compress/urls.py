@@ -1,11 +1,11 @@
 from django.urls import path
-from . import views
+from .views import HomeView, ImageUploadView, FileUploadView, ExampleView
 
 app_name = 'compress'
 urlpatterns = [
-    path('upload_image/', views.upload_image, name='upload_image'),
-    path('upload_file/', views.upload_file, name='upload_file'),
-    path('example/', views.ExampleView.as_view(), name='example'),
-    path('', views.index, name='index'),
+    path('', HomeView.as_view(), name='index'),
+    path('upload_image/', ImageUploadView.as_view(), name='upload_image'),
+    path('upload_file/', FileUploadView.as_view(), name='upload_file'),
+    path('example/', ExampleView.as_view(), name='example'),
 ]
 

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    async function fetchWeatherData() {
+        const response = await fetch('data/');
+        const data = await response.json();
+        document.getElementById('jam').innerText = data.jam;
+        document.getElementById('hari').innerText = data.hari;
+        document.getElementById('tanggal').innerText = data.tanggal;
+        document.getElementById('suhu').innerText = data.suhu + "°C";
+        document.getElementById('kelembapan').innerText = data.kelembapan + "%";
+        document.getElementById('status_cuaca').innerText = data.status_cuaca;
+
+        updateChart(data.suhu, data.kelembapan);
+    }
+
+    let suhuData = [];
+    let kelembapanData = [];
+    let labels = [];
+    let weatherChart;
+
+    function initChart() {
+        const ctx = document.getElementById('weatherChart').getContext('2d');
+        weatherChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Suhu (°C)',
+                    data: suhuData,
+                    borderColor: 'red',
+                    fill: false
+                }, {
+                    label: 'Kelembapan (%)',
+                    data: kelembapanData,
+                    borderColor: 'blue',
+                    fill: false
+                }]
+            }
+        });
+    }
+
+    function updateChart(suhu, kelembapan) {
+        const now = new Date().toLocaleTimeString();
+        if (labels.length > 10) {
+            labels.shift();
+            suhuData.shift();
+            kelembapanData.shift();
+        }
+        labels.push(now);
+        suhuData.push(suhu);
+        kelembapanData.push(kelembapan);
+        weatherChart.update();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        initChart();
+        fetchWeatherData();
+        setInterval(fetchWeatherData, 5000);  // Update setiap 5 detik
+    });
+</script>
+
+<div class="container">
+    <h1>Fitur Fitur IOT</h1>
+    {% include "iot/navbar.html" %}
+</div>
+<div class="container mt-5">
+    <h1>Weather Dashboard</h1>
+    <p>Jam: <span id="jam"></span></p>
+    <p>Hari: <span id="hari"></span></p>
+    <p>Tanggal: <span id="tanggal"></span></p>
+    <p>Suhu: <span id="suhu"></span></p>
+    <p>Kelembapan: <span id="kelembapan"></span></p>
+    <p>Status Cuaca: <span id="status_cuaca"></span></p>
+
+    <canvas id="weatherChart" width="400" height="200"></canvas>
+
+</div>
+{% endblock content %}

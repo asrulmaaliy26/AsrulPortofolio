@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Fitur Upload App</h1>
+    {% include "fiturapp/navbar.html" %}
+
+    {% block additional_links %}
+    <a class="nav-link" href="#">Index UploadApp 1</a>
+    <a class="nav-link" href="#">Upload Image 1</a>
+    <a class="nav-link" href="#">Upload File 1</a>
+    {% endblock additional_links %}
+</div>
+<div class="container mt-5">
+    <h1>{{message}}</h1>
+    <p>Upload App</p>
+</div>
+
+{% endblock content %}

@@ -37,12 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'portfolio',
     'blog',
     'skripsi',
     'fiturapp',
     'fitur.scraping',
     'fitur.compress',
+    'fitur.uploadapp',
+    'iot',
     'iotprojek.weather_api',
     'iotprojek.weather_dashboard'
     # 'widget_tweaks', # ini untuk menambahkan class di 
