@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>File List</h1>
+    {% include "uploadapp/navbar.html" %}
+</div>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Uploaded Files</h2>
+    <div class="card shadow-sm p-4">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>File Name</th>
+                    <th>Format</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                <tr>
+                    <td>{{ file.name }}</td>
+                    <td>{{ file.format }}</td>
+                    <td>
+                        <a href="{% url 'fiturapp:uploadapp:view_excel_file' %}?file_name={{ file.name }}" class="btn btn-sm btn-info">
+                            View
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center">No files uploaded yet</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

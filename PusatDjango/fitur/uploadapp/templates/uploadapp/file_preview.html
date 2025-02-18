@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>View Excel</h1>
+    {% include "uploadapp/navbar.html" %}
+</div>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Preview: {{ file_name }}</h2>
+    <div class="card shadow-sm p-4">
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    {% for key in data.0.keys %}
+                    <th>{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    {% for value in row.values %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

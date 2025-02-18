@@ -3,8 +3,9 @@
 {% block additional_links %}
 <nav class="navbar navbar-light bg-light">
     <div class="d-flex flex-column">
-        <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'fiturapp:uploadapp' %}active{% endif %}" href="{% url 'fiturapp:uploadapp:index' %}">Index UploadApp</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'upload_file' and request.resolver_match.namespace == 'fiturapp:uploadapp' %}active{% endif %}" href="{% url 'fiturapp:uploadapp:upload_file' %}">Upload File</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'file_list' and request.resolver_match.namespace == 'fiturapp:uploadapp' %}active{% endif %}" href="{% url 'fiturapp:uploadapp:file_list' %}">File List</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'view_excel_file' and request.resolver_match.namespace == 'fiturapp:uploadapp' %}active{% endif %}" href="">View File Excel</a>
     </div>
 </nav>
 <style>

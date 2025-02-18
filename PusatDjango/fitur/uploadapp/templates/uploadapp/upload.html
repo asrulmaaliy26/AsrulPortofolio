@@ -6,17 +6,76 @@
     {% include "uploadapp/navbar.html" %}
 </div>
 <div class="container mt-5">
-    <h2>Upload File Excel atau Word</h2>
-    
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="file">
-        <button type="submit">Upload</button>
-    </form>
+    <script>
+        function handleUpload(event) {
+            event.preventDefault();
+            var formData = new FormData(event.target);
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+            fetch("{% url 'fiturapp:uploadapp:upload_file' %}", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById("successMessage").style.display = "block";
+                        document.getElementById("fileName").innerText = data.file_name;
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        }
+    </script>
+    <h2 class="text-center mb-4">Upload Excel File</h2>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card shadow-sm p-4">
+                <form onsubmit="handleUpload(event)" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Select Excel File:</label>
+                        <input type="file" class="form-control" name="file" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="new_file_name" class="form-label">New File Name (without extension):</label>
+                        <input type="text" class="form-control" name="new_file_name" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Upload</button>
+                </form>
+            </div>
+
+            <div id="successMessage" class="alert alert-success mt-3 d-none">
+                File uploaded successfully! Saved as: <strong><span id="fileName"></span></strong>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card shadow-sm p-4">
+                <h3 class="mb-3">Uploaded Files</h3>
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>File Name</th>
+                            <th>Format</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for file in files %}
+                        <tr>
+                            <td>{{ file.name }}</td>
+                            <td>{{ file.format }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-center">No files uploaded yet</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock content %}
