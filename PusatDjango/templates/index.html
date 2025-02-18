@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 {% comment %} <a href="{% url 'portfolio:edit_portfolio' %}">edit portfolio</a> {% endcomment %}
+ 
 <!-- ******HEADER****** -->
 <header class="header">
     <div class="container">
@@ -12,7 +13,7 @@
                     style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#imageModal" />
                 <div class="profile-content">
                     <h1 class="name">Asrul Maaliy</h1>
-                    <h2 class="desc">Web App Developer &<br><a href="{% url 'template' %}">Cyber Security</a> <--< /h2>
+                    <h2 class="desc">Web App Developer &<br><a href="{% url 'template' %}">Cyber Security</a> </h2>
                             <ul class="social list-inline mb-0">
                                 <li class="list-inline-item"><a href="{{twitter_link.link}}"><i
                                             class="fab fa-twitter"></i></a></li>
@@ -27,11 +28,9 @@
                             </ul>
                 </div><!--//profile-->
             </div><!--//col-->
-
             <div class="col-12 col-md-auto">
                 <div class="d-flex dark-mode-switch">
                     <div class="bg-theme">
-                        <!-- Theme change button -->
                         <i class="uil mx-2" id="darkModeToggle"></i>
                     </div>
                     <label class="form-check-label mx-2" for="darkModeToggle" id="modeLabel">Dark Mode</label>
@@ -98,7 +97,7 @@
                                 </div>
                             </div>
 
-                            <h3 class="title mb-3"><a href="https://github.com/asrulmaaliy26" target="_blank">Launch -
+                            <h3 class="title mb-3"><a href="https://admin.maalhidayahkauman.sch.id/" target="_blank">Launch -
                                     The perfect Admin System with Laravel</a>
                             </h3>
 
