@@ -26,6 +26,7 @@ urlpatterns = [
     path('iot/', include('iot.urls', namespace='iot')),
     path('portfolio/', include('portfolio.urls', namespace='portfolio')),
     path('skripsi/', include('skripsi.urls', namespace='skripsi')),
+    path('mlapp/', include('mlapp.urls', namespace='mlapp')),
     
     
     path('', index, name='index'),

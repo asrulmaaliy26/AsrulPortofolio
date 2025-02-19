@@ -18,8 +18,12 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        document.getElementById("successMessage").style.display = "block";
-                        document.getElementById("fileName").innerText = data.file_name;
+                        let successMessage = document.getElementById("successMessage");
+                        let fileNameElement = document.getElementById("fileName");
+
+                        fileNameElement.innerText = data.file_name;
+                        successMessage.classList.remove("d-none"); // Menampilkan pesan sukses
+                        successMessage.style.display = "block"; // Pastikan ditampilkan
                     }
                 })
                 .catch(error => console.error("Error:", error));
@@ -45,7 +49,7 @@
                 </form>
             </div>
 
-            <div id="successMessage" class="alert alert-success mt-3 d-none">
+            <div id="successMessage" class="alert alert-success mt-3 d-none" style="display: none;">
                 File uploaded successfully! Saved as: <strong><span id="fileName"></span></strong>
             </div>
         </div>

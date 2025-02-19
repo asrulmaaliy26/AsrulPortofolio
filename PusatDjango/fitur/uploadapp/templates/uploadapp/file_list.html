@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-    <h1>File List</h1>
+    <h1>Fitur Upload App</h1>
     {% include "uploadapp/navbar.html" %}
 </div>
 <div class="container mt-5">
@@ -16,15 +16,16 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="fileTable">
                 {% for file in files %}
-                <tr>
+                <tr id="row-{{ file.name }}">
                     <td>{{ file.name }}</td>
                     <td>{{ file.format }}</td>
                     <td>
-                        <a href="{% url 'fiturapp:uploadapp:view_excel_file' %}?file_name={{ file.name }}" class="btn btn-sm btn-info">
+                        <a href="{% url 'fiturapp:uploadapp:view_file' %}?file_name={{ file.name }}" class="btn btn-sm btn-info">
                             View
                         </a>
+                        <button class="btn btn-sm btn-danger" onclick="deleteFile('{{ file.name }}')">Delete</button>
                     </td>
                 </tr>
                 {% empty %}
@@ -36,4 +37,30 @@
         </table>
     </div>
 </div>
+
+<script>
+    function deleteFile(fileName) {
+        if (confirm(`Are you sure you want to delete ${fileName}?`)) {
+            fetch("{% url 'fiturapp:uploadapp:delete_file' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: `file_name=${fileName}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`row-${fileName}`).remove();
+                    alert(data.message);
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    }
+</script>
+
 {% endblock %}

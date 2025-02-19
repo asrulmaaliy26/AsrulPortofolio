@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'fitur.scraping',
     'fitur.compress',
     'fitur.uploadapp',
+    'mlapp',
+    'mlprojek.prediksi',
+    'mlprojek.klasifikasi',
     'iot',
     'iotprojek.weather_api',
     'iotprojek.weather_dashboard'
