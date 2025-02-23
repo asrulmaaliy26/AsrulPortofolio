@@ -45,12 +45,14 @@ INSTALLED_APPS = [
     'fitur.scraping',
     'fitur.compress',
     'fitur.uploadapp',
+    'fitur.convert',
     'mlapp',
     'mlprojek.prediksi',
     'mlprojek.klasifikasi',
     'iot',
     'iotprojek.weather_api',
-    'iotprojek.weather_dashboard'
+    'iotprojek.weather_dashboard',
+    'iotprojek.sensorkualitasudara'
     # 'widget_tweaks', # ini untuk menambahkan class di 
 ]
 

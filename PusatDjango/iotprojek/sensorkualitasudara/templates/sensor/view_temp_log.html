@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center text-uppercase mt-3">Isi datatemp.log</h1>
+    {% include "sensor/navbar.html" %}
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-primary">Data Log</h2>
+
+    <!-- Card untuk log -->
+    <div class="card shadow-lg p-3">
+        <div class="card-body">
+            <div class="border p-3 bg-light rounded overflow-auto" style="max-height: 400px;">
+                <pre class="mb-0 text-dark">
+{% for line in log_data %}
+    {{ line }}
+{% endfor %}
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tombol Export -->
+    <div class="d-flex gap-3 mt-4">
+        <a class="btn btn-outline-primary btn-lg shadow" href="{% url 'iot:sensorkualitasudara:export_csv' %}">
+            <i class="fas fa-file-csv"></i> Export CSV
+        </a>
+        <a class="btn btn-outline-success btn-lg shadow" href="{% url 'iot:sensorkualitasudara:export_excel' %}">
+            <i class="fas fa-file-excel"></i> Export Excel
+        </a>
+        <a class="btn btn-outline-danger btn-lg shadow" href="{% url 'iot:sensorkualitasudara:export_pdf' %}">
+            <i class="fas fa-file-pdf"></i> Export PDF
+        </a>
+        <div class="btn-group">
+            <button type="button" class="btn btn-info btn-lg shadow" data-bs-toggle="modal" data-bs-target="#uploadDatasetModal">
+                <i class="fas fa-brain"></i> Upload Dataset ke ML
+            </button>
+        </div>
+        
+        <!-- Modal untuk Upload Dataset -->
+        <div class="modal fade" id="uploadDatasetModal" tabindex="-1" aria-labelledby="uploadDatasetLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadDatasetLabel">Upload Dataset</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="datasetForm" action="{% url 'iot:sensorkualitasudara:upload_dataset' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="datasetFilename" class="form-label">Nama File</label>
+                                <input type="text" class="form-control" id="datasetFilename" name="filename" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+
+
+    </div>
+
+    <!-- Tombol Kembali -->
+    <div class="mt-4">
+        <a class="btn btn-primary btn-lg shadow" href="{% url 'iot:sensorkualitasudara:index' %}">
+            <i class="fas fa-home"></i> Kembali ke Home
+        </a>
+    </div>
+</div>
+
+{% endblock content %}

@@ -2,34 +2,51 @@
 
 {% block content %}
 <div class="container">
-    <h1>Upload a file (PDF/DOCX) to compress</h1>
+    <h1 class="text-center text-uppercase mt-3">Upload a file (PDF/DOCX) to compress</h1>
     {% include "compress/navbar.html" %}
 </div>
-<div class="container mt-5">
-    <form class="m-5" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Upload and Compress</button>
-    </form>
 
-    {% if compressed_file %}
-    <h2>Original Size: {{ original_size }} KB</h2>
-    <h2>Compressed Size: {{ compressed_size }} KB</h2>
-
-    <h2>Compressed File:</h2>
-
-    {% if file_type == 'pdf' %}
-    <!-- Tampilkan PDF -->
-    <iframe src="data:application/pdf;base64,{{ compressed_file }}" width="100%" height="500px"></iframe>
-    {% elif file_type == 'docx' %}
-    <!-- Tampilkan link untuk download file DOCX -->
-    <p>DOCX file has been compressed. Click the button below to download:</p>
-    {% endif %}
-
-    <a class="btn btn-primary" href="data:application/{{ file_type }};base64,{{ compressed_file }}"
-        download="compressed_file.{{ file_type|upper }}">
-        Download Compressed {{ file_type|upper }}
-    </a>
-    {% endif %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg p-4">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.as_p }}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Upload and Compress</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+{% if compressed_file %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg p-4 text-center">
+                <h2 class="text-success">Compression Successful!</h2>
+                <p class="text-muted">Original Size: <strong>{{ original_size }} KB</strong></p>
+                <p class="text-muted">Compressed Size: <strong>{{ compressed_size }} KB</strong></p>
+
+                {% if file_type == 'pdf' %}
+                <div class="border rounded overflow-hidden mt-3">
+                    <iframe src="data:application/pdf;base64,{{ compressed_file }}" width="100%"
+                        height="400px"></iframe>
+                </div>
+                {% elif file_type == 'docx' %}
+                <p class="mt-3 text-muted">DOCX file has been compressed. Click the button below to download:</p>
+                {% endif %}
+
+                <a class="btn btn-success mt-3" href="data:application/{{ file_type }};base64,{{ compressed_file }}"
+                    download="compressed_file.{{ file_type|lower }}">
+                    <i class="bi bi-download"></i> Download Compressed {{ file_type|upper }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock content %}

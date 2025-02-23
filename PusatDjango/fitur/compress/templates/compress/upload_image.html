@@ -2,53 +2,92 @@
 
 {% block content %}
 <div class="container">
-    <h1>Upload a file Image</h1>
+    <h1 class="text-center text-uppercase mt-3">Upload a file Image</h1>
     <h1>{{judul}}</h1>
     {% include "compress/navbar.html" %}
 </div>
 <div class="container mt-5">
-    <div class="m-5">
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Upload and Compress</button>
-        </form>
 
-        {% if compressed_img %}
-        <h2>Original Size: {{ original_size }} KB</h2>
-        <h2>Compressed Size: {{ compressed_size }} KB</h2>
-
-        <h2>Compressed Image (Preview):</h2>
-        <!-- Gambar dengan ukuran pratinjau, klik untuk membuka modal -->
-        <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal">
-            <img src="data:image/jpeg;base64,{{ compressed_img }}" alt="Compressed Image" style="width: 300px;">
-        </a>
-
-        <h2>Download Compressed Image:</h2>
-        <a class="btn btn-primary" href="data:image/jpeg;base64,{{ compressed_img }}"
-            download="compressed_image.jpg">Download Image</a>
-
-        <!-- Modal Bootstrap untuk melihat detail gambar -->
-        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="imageModalLabel">Compressed Image Detail</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <!-- Gambar dengan ukuran besar di dalam modal -->
-                        <img src="data:image/jpeg;base64,{{ compressed_img }}" alt="Compressed Image" class="img-fluid">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a class="btn btn-primary" href="data:image/jpeg;base64,{{ compressed_img }}"
-                            download="compressed_image.jpg">Download Image</a>
-                    </div>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg p-4">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.as_p }}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Upload and Compress</button>
+                    </form>
                 </div>
             </div>
         </div>
-        {% endif %}
     </div>
+
+    {% if compressed_file or compressed_img %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg p-4 text-center">
+                    <h2 class="text-success">Compression Successful!</h2>
+                    <p class="text-muted">Original Size: <strong>{{ original_size }} KB</strong></p>
+                    <p class="text-muted">Compressed Size: <strong>{{ compressed_size }} KB</strong></p>
+
+                    {% if compressed_file and file_type == 'pdf' %}
+                    <div class="border rounded overflow-hidden mt-3">
+                        <iframe src="data:application/pdf;base64,{{ compressed_file }}" width="100%"
+                            height="400px"></iframe>
+                    </div>
+                    {% elif compressed_file and file_type == 'docx' %}
+                    <p class="mt-3 text-muted">DOCX file has been compressed. Click the button below to download:</p>
+                    {% elif compressed_img %}
+                    <h2>Compressed Image (Preview):</h2>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal">
+                        <img src="data:image/jpeg;base64,{{ compressed_img }}" alt="Compressed Image"
+                            class="img-thumbnail" style="width: 300px;">
+                    </a>
+                    {% endif %}
+
+                    <a class="btn btn-success mt-3" href="data:application/{{ file_type }};base64,{{ compressed_file }}"
+                        download="compressed_file.{{ file_type|lower }}">
+                        <i class="bi bi-download"></i> Download Compressed {{ file_type|upper }}
+                    </a>
+
+                    {% if compressed_img %}
+                    <a class="btn btn-success mt-3" href="data:image/jpeg;base64,{{ compressed_img }}"
+                        download="compressed_image.jpg">
+                        <i class="bi bi-download"></i> Download Image
+                    </a>
+
+                    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="imageModalLabel">Compressed Image Detail</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <img src="data:image/jpeg;base64,{{ compressed_img }}" alt="Compressed Image"
+                                        class="img-fluid rounded">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <a class="btn btn-primary" href="data:image/jpeg;base64,{{ compressed_img }}"
+                                        download="compressed_image.jpg">
+                                        <i class="bi bi-download"></i> Download Image
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock content %}

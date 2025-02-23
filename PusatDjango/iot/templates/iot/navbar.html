@@ -4,9 +4,13 @@
 
         <!-- Links Section -->
         <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'iot' %}active{% endif %}" href="{% url 'iot:index' %}">Index</a>
+        {% comment %}
         <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'iot:weatherapi' %}active{% endif %}" href="{% url 'iot:weatherapi:index' %}">Index Weather API</a>
+        {% endcomment %}
         <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'iot:weatherdashboard' %}active{% endif %}" href="{% url 'iot:weatherdashboard:index' %}">Weather dashboard from Weather API</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'iot:sensorkualitasudara' %}active{% endif %}" href="{% url 'iot:sensorkualitasudara:index' %}">Sensor Kualitas Udara</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'example' and request.resolver_match.namespace == 'iot' %}active{% endif %}" href="{% url 'iot:example' %}">Example</a>
+        {% block additional_links %}{% endblock %}
 
     </div>
 </nav>

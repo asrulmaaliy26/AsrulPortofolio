@@ -14,7 +14,7 @@ def upload_file(request):
         new_file_name = request.POST['new_file_name']
         file_extension = Path(uploaded_file.name).suffix.lower()
         renamed_file = f"{new_file_name}{file_extension}"
-        save_path = Path(settings.MEDIA_ROOT) / 'uploadapp' / renamed_file
+        save_path = Path(settings.MEDIA_ROOT) / 'data' / renamed_file
 
         # Pastikan folder target ada
         save_path.parent.mkdir(parents=True, exist_ok=True)
@@ -33,7 +33,7 @@ def upload_file(request):
         return JsonResponse(response_data)
 
     # Dapatkan daftar file yang telah diunggah
-    upload_dir = Path(settings.MEDIA_ROOT) / 'uploadapp'
+    upload_dir = Path(settings.MEDIA_ROOT) / 'data'
     files = []
     if upload_dir.exists():
         files = [{"name": f.name, "format": f.suffix} for f in upload_dir.iterdir() if f.is_file()]
@@ -43,7 +43,7 @@ def upload_file(request):
 
 def file_list(request):
     """View untuk menampilkan daftar file yang telah diunggah."""
-    upload_dir = Path(settings.MEDIA_ROOT) / 'uploadapp'
+    upload_dir = Path(settings.MEDIA_ROOT) / 'data'
     files = []
 
     if upload_dir.exists():
@@ -58,7 +58,7 @@ def view_file(request):
     if not file_name:
         return JsonResponse({"error": "File name is required"}, status=400)
 
-    file_path = Path(settings.MEDIA_ROOT) / 'uploadapp' / file_name
+    file_path = Path(settings.MEDIA_ROOT) / 'data' / file_name
 
     if not file_path.exists():
         return JsonResponse({"error": "File not found"}, status=404)
@@ -98,7 +98,7 @@ def delete_file(request):
     """View untuk menghapus file yang dipilih."""
     if request.method == "POST":
         file_name = request.POST.get("file_name")
-        file_path = Path(settings.MEDIA_ROOT) / 'uploadapp' / file_name
+        file_path = Path(settings.MEDIA_ROOT) / 'data' / file_name
 
         if file_path.exists():
             file_path.unlink()  # Hapus file
