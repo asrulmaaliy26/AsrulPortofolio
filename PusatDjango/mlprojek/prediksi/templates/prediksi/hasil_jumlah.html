@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% comment %}
+{% endcomment %}
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        <label for="columns">Pilih Kolom yang Akan Dihapus:</label>
+        <select name="columns" multiple class="form-control">
+            {% for col in columns %}
+                <option value="{{ col }}">{{ col }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-danger mt-2">Hapus Kolom</button>
+    </form>
+    
+    {% if edited_file %}
+        <p>File yang telah diedit: <a href="{{ edited_file }}">Download</a></p>
+    {% endif %}
+</div>
+<div class="container mt-5">
+    <h2 class="text-center alert alert-info">Hasil Proses File: {{ file_name }}</h2>
+    
+    {% if table_data %}
+    <div class="table-responsive">
+        {{ table_data | safe }}  <!-- Menampilkan tabel data -->
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

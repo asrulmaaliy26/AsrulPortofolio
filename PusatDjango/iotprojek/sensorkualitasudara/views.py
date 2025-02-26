@@ -71,8 +71,9 @@ def export_file(request, file_type):
             return HttpResponse("Tidak ada data untuk diekspor.", content_type="text/plain")
         
         df = pd.DataFrame(clean_data, columns=["Waktu", "PPM", "Temp", "Humidity"])
+        file_extension = "xlsx" if file_type == "excel" else file_type
         response = HttpResponse(content_type=get_content_type(file_type))
-        response['Content-Disposition'] = f'attachment; filename="data_log.{file_type}"'
+        response['Content-Disposition'] = f'attachment; filename="data_log.{file_extension}"'
         
         if file_type == "csv":
             df.to_csv(response, index=False)

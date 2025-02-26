@@ -4,6 +4,7 @@
 
         <!-- Links Section -->
         <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'mlapp' %}active{% endif %}" href="{% url 'mlapp:index' %}">Index</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'file_list' and request.resolver_match.namespace == 'mlapp' %}active{% endif %}" href="{% url 'mlapp:file_list' %}">File List Excel</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'mlapp:klasifikasi' %}active{% endif %}" href="{% url 'mlapp:klasifikasi:index' %}">Index klasifikasi</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'mlapp:prediksi' %}active{% endif %}" href="{% url 'mlapp:prediksi:index' %}">Index Prediksi</a>
         {% block additional_links %}{% endblock %}
