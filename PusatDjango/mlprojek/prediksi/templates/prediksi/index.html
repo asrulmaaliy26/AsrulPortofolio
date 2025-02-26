@@ -8,7 +8,7 @@
 
 <div class="container mt-5">
     <h1>{{ message }}</h1>
-    <p>Prediksi</p>
+    <p>Hapus Kolom File</p>
     
     <!-- Dropdown untuk memilih file -->
     <select id="fileSelect" class="form-control mt-3">
@@ -19,16 +19,45 @@
     </select>
 
     <!-- Tombol untuk memproses file -->
-    <button id="processFileBtn" class="btn btn-success mt-2"
-        data-url="{% url 'mlapp:prediksi:proses_file' 'dummy' %}">
-        Proses File
+    <button id="hapusColomBtn" class="btn btn-success mt-2"
+        data-url="{% url 'mlapp:prediksi:hapus_colom_file' 'dummy' %}">
+        Hapus Kolom File
+    </button>
+</div>
+
+<div class="container mt-5">
+    <h1>{{ message }}</h1>
+    <p>Prediksi SVR</p>
+    
+    <!-- Dropdown untuk memilih file -->
+    <select id="fileSelectPrediksi" class="form-control mt-3">
+        <option value="">-- Pilih File --</option>
+        {% for file in files %}
+        <option value="{{ file.name }}">{{ file.name }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Tombol untuk memproses file -->
+    <button id="prediksiSvrBtn" class="btn btn-primary mt-2"
+        data-url="{% url 'mlapp:prediksi:prediksi_svr' 'dummy' %}">
+        Prediksi SVR
     </button>
 </div>
 
 <script>
-
-    document.getElementById("processFileBtn").addEventListener("click", function () {
+    document.getElementById("hapusColomBtn").addEventListener("click", function () {
         let selectedFile = document.getElementById("fileSelect").value;
+        if (selectedFile) {
+            let urlTemplate = this.getAttribute("data-url");
+            let finalUrl = urlTemplate.replace("dummy", encodeURIComponent(selectedFile));
+            window.location.href = finalUrl;
+        } else {
+            alert("Silakan pilih file terlebih dahulu.");
+        }
+    });
+
+    document.getElementById("prediksiSvrBtn").addEventListener("click", function () {
+        let selectedFile = document.getElementById("fileSelectPrediksi").value;
         if (selectedFile) {
             let urlTemplate = this.getAttribute("data-url");
             let finalUrl = urlTemplate.replace("dummy", encodeURIComponent(selectedFile));

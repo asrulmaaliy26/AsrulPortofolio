@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center text-uppercase mt-3">Fitur Prediksi</h1>
+    {% include "prediksi/navbar.html" %}
+</div>
+
+<div class="container my-5">
+
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="text-center text-primary">Prediksi Data Menggunakan SVR</h2>
+            <p class="text-center"><strong>File:</strong> {{ file_name }}</p>
+
+            {% if error %}
+            <div class="alert alert-danger text-center">{{ error }}</div>
+            {% else %}
+
+            {% if table_data %}
+            <div class="mt-4">
+                <h3 class="text-secondary">Data Sample (5 Baris Pertama)</h3>
+                <div class="table-responsive">
+                    {{ table_data | safe }}
+                </div>
+            </div>
+            {% endif %}
+
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="fitur" class="form-label fw-bold">Pilih Kolom Fitur:</label>
+                        <select name="fitur" id="fitur" multiple class="form-select">
+                            {% for column in columns %}
+                            <option value="{{ column }}">{{ column }}</option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-muted">Gunakan CTRL + Klik untuk memilih banyak kolom</small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="target" class="form-label fw-bold">Pilih Kolom Target:</label>
+                        <select name="target" id="target" class="form-select">
+                            {% for column in columns %}
+                            <option value="{{ column }}">{{ column }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-chart-line"></i> Prediksi
+                    </button>
+                </div>
+            </form>
+
+            {% if predicted_value is not None %}
+            <div class="mt-5">
+                <h3 class="text-success"><i class="fas fa-check-circle"></i> Hasil Prediksi</h3>
+                <p class="fs-5"><strong>Prediksi Pertama:</strong> {{ predicted_value }}</p>
+
+                <h3 class="text-info mt-4"><i class="fas fa-chart-bar"></i> Evaluasi Model</h3>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Mean Absolute Error (MAE):</strong> {{ mae }}</li>
+                    <li class="list-group-item"><strong>Mean Absolute Percentage Error (MAPE):</strong> {{ mape }}</li>
+                    <li class="list-group-item"><strong>R² Score:</strong> {{ r2 }}</li>
+                </ul>
+            </div>
+            {% endif %}
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% comment %}
-{% endcomment %}
 <div class="container">
+    <h1 class="text-center text-uppercase mt-3">Fitur Prediksi</h1>
+    {% include "prediksi/navbar.html" %}
+</div>
+
+<div class="container mt-5">
     <form method="POST">
         {% csrf_token %}
         <label for="columns">Pilih Kolom yang Akan Dihapus:</label>

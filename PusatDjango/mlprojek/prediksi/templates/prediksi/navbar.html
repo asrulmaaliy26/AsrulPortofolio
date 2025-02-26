@@ -3,7 +3,7 @@
 {% block additional_links %}
 <nav class="navbar navbar-light bg-light">
     <div class="d-flex flex-column">
-        <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'mlapp:prediksi' %}active{% endif %}" href="{% url 'mlapp:prediksi:index' %}">Index Prediksi</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'mlapp:prediksi' %}active{% endif %}" href="{% url 'mlapp:prediksi:index' %}">Dashboard Prediksi</a>
     </div>
 </nav>
 <style>
