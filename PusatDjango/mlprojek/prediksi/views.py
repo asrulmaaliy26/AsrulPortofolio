@@ -44,12 +44,16 @@ def hapus_colom_file(request, file_name):
         "columns": df.columns.tolist(),
         "edited_file": unique_file_path.name if unique_file_path else None
     })
-from sklearn.preprocessing import LabelEncoder, StandardScaler
-from sklearn.model_selection import train_test_split
+    
+import joblib
+from pathlib import Path
+from django.conf import settings
+import pandas as pd
 from sklearn.svm import SVR
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error, r2_score
-import pandas as pd
 import json
 
 def prediksi_svr(request, file_name):
@@ -60,23 +64,31 @@ def prediksi_svr(request, file_name):
         return render(request, "prediksi/prediksi_svr.html", {"file_name": file_name, "error": response_data.get("error"), "columns": []})
 
     df = pd.DataFrame(response_data.get("data", []))
-    predicted_value, mae, mape, r2 = None, None, None, None  # Inisialisasi metrik
+    predicted_value, mae, mape, r2 = None, None, None, None  
+    fitur, target = [], None
 
+    model_path = Path(settings.MEDIA_ROOT) / "models/prediksi"
+    model_path.mkdir(parents=True, exist_ok=True)
+    model_file = model_path / f"svr_model_{file_name}.pkl"
+    metadata_file = model_path / f"svr_metadata_{file_name}.json"
+
+    if metadata_file.exists():
+        with open(metadata_file, "r") as f:
+            metadata = json.load(f)
+        fitur = metadata["fitur"]
+        target = metadata["target"]
+        
     if request.method == "POST":
         fitur = request.POST.getlist("fitur")
         target = request.POST.get("target")
 
         if fitur and target and target in df.columns:
-            # Konversi kolom non-numerik ke angka menggunakan Label Encoding
             for col in fitur + [target]:
                 if df[col].dtype == 'object':
-                    le = LabelEncoder()
-                    df[col] = le.fit_transform(df[col])
+                    df[col] = df[col].astype('category').cat.codes
 
-            # Menghapus atau menangani NaN
             df.dropna(inplace=True)
 
-            # Imputasi NaN dengan mean jika masih ada
             imputer = SimpleImputer(strategy="mean")
             df[fitur] = imputer.fit_transform(df[fitur])
             df[target] = imputer.fit_transform(df[[target]])
@@ -84,32 +96,39 @@ def prediksi_svr(request, file_name):
             X = df[fitur]
             y = df[target]
 
-            if X.shape[1] > 0 and y.shape[0] > 0:
-                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-                scaler = StandardScaler()
-                X_train_scaled = scaler.fit_transform(X_train)
-                X_test_scaled = scaler.transform(X_test)
+            scaler = StandardScaler()
+            X_train_scaled = scaler.fit_transform(X_train)
+            X_test_scaled = scaler.transform(X_test)
+            
+            metadata = {"fitur": fitur, "target": target}
+            with open(metadata_file, "w") as f:
+                json.dump(metadata, f)
 
+            if model_file.exists():
+                svr = joblib.load(model_file)
+            else:
                 svr = SVR()
                 svr.fit(X_train_scaled, y_train)
+                joblib.dump(svr, model_file)
 
-                y_pred = svr.predict(X_test_scaled)
+            y_pred = svr.predict(X_test_scaled)
 
-                # Hitung metrik evaluasi
-                mae = mean_absolute_error(y_test, y_pred)
-                mape = mean_absolute_percentage_error(y_test, y_pred)
-                r2 = r2_score(y_test, y_pred)
+            mae = mean_absolute_error(y_test, y_pred)
+            mape = mean_absolute_percentage_error(y_test, y_pred)
+            r2 = r2_score(y_test, y_pred)
 
-                if not X_test_scaled.size == 0:
-                    predicted_value = y_pred[0]
+            predicted_value = y_pred[0] if y_pred.size > 0 else None
 
     return render(request, "prediksi/prediksi_svr.html", {
         "file_name": file_name,
         "columns": df.columns.tolist(),
+        "fitur": fitur,
+        "target": target,
         "predicted_value": predicted_value,
         "mae": mae,
         "mape": mape,
         "r2": r2,
-        "table_data": df.head(5).to_html(classes="table table-bordered table-striped", index=False)  # Hanya 5 baris pertama
-})
+        "table_data": df.head(5).to_html(classes="table table-bordered table-striped", index=False)
+    })
