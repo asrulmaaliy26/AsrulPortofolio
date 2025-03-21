@@ -34,13 +34,15 @@
             <i class="fas fa-file-pdf"></i> Export PDF
         </a>
         <div class="btn-group">
-            <button type="button" class="btn btn-info btn-lg shadow" data-bs-toggle="modal" data-bs-target="#uploadDatasetModal">
+            <button type="button" class="btn btn-info btn-lg shadow" data-bs-toggle="modal"
+                data-bs-target="#uploadDatasetModal">
                 <i class="fas fa-brain"></i> Upload Dataset ke ML
             </button>
         </div>
-        
+
         <!-- Modal untuk Upload Dataset -->
-        <div class="modal fade" id="uploadDatasetModal" tabindex="-1" aria-labelledby="uploadDatasetLabel" aria-hidden="true">
+        <div class="modal fade" id="uploadDatasetModal" tabindex="-1" aria-labelledby="uploadDatasetLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -48,7 +50,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="datasetForm" action="{% url 'iot:sensorkualitasudara:upload_dataset' %}" method="POST">
+                        <form id="datasetForm" action="{% url 'iot:sensorkualitasudara:upload_dataset' %}"
+                            method="POST">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="datasetFilename" class="form-label">Nama File</label>
@@ -60,7 +63,7 @@
                 </div>
             </div>
         </div>
-        
+
 
 
 
