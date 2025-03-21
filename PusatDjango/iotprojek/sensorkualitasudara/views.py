@@ -8,6 +8,7 @@ import datetime
 import pandas as pd
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+import random
 
 # Global Constants
 DATA_LOG_PATH = Path("iotprojek/sensorkualitasudara/data/data.log")
@@ -28,8 +29,10 @@ def receive_data(request):
 
     if request.method == "POST":
         try:
-            print(f"[DEBUG] Raw body: {request.body}")  # Cek isi request
-            print(f"[DEBUG] POST data: {request.POST}")  # Cek data yang diterima
+            nilai_random = random.randint(10, 99)
+            
+            print(f"[DEBUG] {nilai_random} Raw body: {request.body}")  # Cek isi request
+            print(f"[DEBUG] {nilai_random} POST data: {request.POST}")  # Cek data yang diterima
 
             ppm, temp, humi = request.POST.get("ppm"), request.POST.get("temp"), request.POST.get("humi")
             if not all([ppm, temp, humi]):
@@ -38,7 +41,8 @@ def receive_data(request):
             log_entry = f"{datetime.datetime.now().strftime('%H:%M:%S')} | PPM: {ppm} | Temp: {temp} | Hum: {humi}\n"
             DATA_LOG_PATH.write_text(DATA_LOG_PATH.read_text() + log_entry, encoding='utf-8')
 
-            return JsonResponse({"message": "Data berhasil diterima"}, status=200)
+            
+            return JsonResponse({"message": "Data berhasil diterima", "nilai_random": nilai_random}, status=200)
 
         except Exception as e:
             print(f"[ERROR] {str(e)}")
