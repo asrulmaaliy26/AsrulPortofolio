@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'iot',
     'iotprojek.weather_api',
     'iotprojek.weather_dashboard',
-    'iotprojek.sensorkualitasudara'
+    'iotprojek.sensorkualitasudara',
+    'iotprojek.sensorsmartac'
     # 'widget_tweaks', # ini untuk menambahkan class di 
 ]
 

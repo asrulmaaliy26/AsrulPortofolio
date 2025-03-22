@@ -3,16 +3,13 @@
 {% block content %}
 <div class="container">
     <h1 class="text-center text-uppercase mt-3">Dashboard Sensor</h1>
-    {% include "sensor/navbar.html" %}
+    {% include "sensorsmartac/navbar.html" %}
 </div>
 
 <div class="container mt-5">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-primary fw-bold">Grafik Data Sensor Real-Time</h2>
-        <a href="{% url 'iot:sensorkualitasudara:view_temp_log' %}" class="btn btn-outline-primary btn-lg shadow">
-            <i class="fas fa-file-alt"></i> Get Data
-        </a>
     </div>
 
     <!-- Grafik -->
@@ -61,7 +58,7 @@
         });
 
         function fetchData() {
-            fetch("{% url 'iot:sensorkualitasudara:get_data' %}")
+            fetch("{% url 'iot:sensorsmartac:get_data' %}")
                 .then(response => response.text())
                 .then(data => {
                     let lines = data.trim().split("\n");

@@ -7,6 +7,7 @@ urlpatterns = [
     path('weatherapi/', include('iotprojek.weather_api.urls', namespace='weatherapi')),
     path('weatherdashboard/', include('iotprojek.weather_dashboard.urls', namespace='weatherdashboard')),
     path('sensorkualitasudara/', include('iotprojek.sensorkualitasudara.urls', namespace='sensorkualitasudara')),
+    path('sensorsmartac/', include('iotprojek.sensorsmartac.urls', namespace='sensorsmartac')),
     path('example/', views.ExampleView.as_view(), name='example'),
     path('', views.index, name='index'),
 ]
