@@ -2,12 +2,11 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="text-center text-uppercase mt-3">Dashboard Sensor</h1>
+    <h1 class="text-center text-uppercase mt-3">Dashboard Sensor Smart AC</h1>
     {% include "sensorsmartac/navbar.html" %}
 </div>
 
 <div class="container mt-5">
-    <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-primary fw-bold">Grafik Data Sensor Real-Time</h2>
 
@@ -39,14 +38,35 @@
         </div>
     </div>
 
-    <!-- Grafik -->
-    <div class="card shadow-lg p-4">
-        <canvas id="sensorChart"></canvas>
+    <!-- Grafik Container -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow-lg p-4" style="max-height: 350px;">
+                <h5 class="text-center text-danger">Suhu & Kelembapan Dalam</h5>
+                <canvas id="sensorChartIndoor" width="400" height="300"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-lg p-4" style="max-height: 350px;">
+                <h5 class="text-center text-primary">Suhu & Kelembapan Luar</h5>
+                <canvas id="sensorChartOutdoor" width="400" height="300"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-lg p-4" style="max-height: 350px;">
+                <h5 class="text-center text-warning">Suhu AC & Mode AC</h5>
+                <canvas id="sensorChartAC" width="400" height="300"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-lg p-4" style="max-height: 350px;">
+                <h5 class="text-center text-success">PPM</h5>
+                <canvas id="sensorChartPPM" width="400" height="300"></canvas>
+            </div>
+        </div>
     </div>
-
-    <!-- Data Sensor -->
     <div class="mt-5">
-        <h3 class="text-success">Data Sensor Terkini</h3>
+        <h3 class="text-success">Data Sensor</h3>
         <div class="table-responsive">
             <table class="table table-striped table-hover table-bordered">
                 <thead class="table-dark">
@@ -55,6 +75,10 @@
                         <th>PPM</th>
                         <th>Suhu (°C)</th>
                         <th>Kelembapan (%)</th>
+                        <th>Suhu Luar (°C)</th>
+                        <th>Kelembapan Luar (%)</th>
+                        <th>Suhu AC (°C)</th>
+                        <th>Mode AC</th>
                     </tr>
                 </thead>
                 <tbody id="data-table"></tbody>
@@ -63,26 +87,7 @@
     </div>
 
     <script>
-        let ctx = document.getElementById('sensorChart').getContext('2d');
-        let sensorChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [
-                    { label: 'Suhu (°C)', data: [], borderColor: 'red', borderWidth: 2, fill: false },
-                    { label: 'Kelembapan (%)', data: [], borderColor: 'blue', borderWidth: 2, fill: false },
-                    { label: 'PPM', data: [], borderColor: 'green', borderWidth: 2, fill: false }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { title: { display: true, text: 'Waktu' } },
-                    y: { title: { display: true, text: 'Nilai Sensor' } }
-                }
-            }
-        });
+        let sensorChartIndoor, sensorChartOutdoor, sensorChartAC, sensorChartPPM;
 
         async function fetchData() {
             try {
@@ -92,38 +97,96 @@
                 let labels = [];
                 let suhuData = [];
                 let humiData = [];
+                let suhuLuarData = [];
+                let humiLuarData = [];
+                let suhuACData = [];
+                let modeACData = [];
                 let ppmData = [];
-                let tableBody = "";
 
-                let latestData = data.slice(-5); // Ambil 5 data terbaru untuk grafik
+                let latestData = data.slice(-10); // Ambil maksimal 10 data terbaru
 
-                data.reverse().forEach(entry => {
+                latestData.forEach(entry => {
                     let time = new Date(entry.timestamp).toLocaleTimeString();
-                    let ppm = parseFloat(entry.ppm);
-                    let temp = parseFloat(entry.temp);
-                    let humi = parseFloat(entry.humi);
-
-                    tableBody += `<tr>
-                        <td>${time}</td>
-                        <td>${ppm}</td>
-                        <td>${temp}</td>
-                        <td>${humi}</td>
-                    </tr>`;
-
-                    if (latestData.includes(entry)) {
-                        labels.push(time);
-                        ppmData.push(ppm);
-                        suhuData.push(temp);
-                        humiData.push(humi);
-                    }
+                    labels.push(time);
+                    ppmData.push(parseFloat(entry.ppm));
+                    suhuData.push(parseFloat(entry.temp));
+                    humiData.push(parseFloat(entry.humi));
+                    suhuLuarData.push(parseFloat(entry.tempout));
+                    humiLuarData.push(parseFloat(entry.humiout));
+                    suhuACData.push(parseFloat(entry.tempac));
+                    modeACData.push(parseFloat(entry.modeac));
                 });
 
-                // Update Chart
-                sensorChart.data.labels = labels;
-                sensorChart.data.datasets[0].data = suhuData;
-                sensorChart.data.datasets[1].data = humiData;
-                sensorChart.data.datasets[2].data = ppmData;
-                sensorChart.update();
+                function createOrUpdateChart(chart, canvasId, datasets) {
+                    let ctx = document.getElementById(canvasId).getContext('2d');
+
+                    if (chart) {
+                        chart.data.labels = labels;
+                        chart.data.datasets.forEach((dataset, index) => {
+                            dataset.data = datasets[index].data;
+                        });
+                        chart.update();
+                    } else {
+                        chart = new Chart(ctx, {
+                            type: 'line',
+                            data: { labels, datasets },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                scales: {
+                                    x: { title: { display: true, text: 'Waktu' } },
+                                    y: { title: { display: true, text: 'Nilai Sensor' } }
+                                }
+                            }
+                        });
+                    }
+                    return chart;
+                }
+
+                // Buat atau perbarui grafik
+                sensorChartIndoor = createOrUpdateChart(sensorChartIndoor, 'sensorChartIndoor', [
+                    { label: 'Suhu (°C)', data: suhuData, borderColor: 'red', borderWidth: 2, fill: false },
+                    { label: 'Kelembapan (%)', data: humiData, borderColor: 'blue', borderWidth: 2, fill: false }
+                ]);
+
+                sensorChartOutdoor = createOrUpdateChart(sensorChartOutdoor, 'sensorChartOutdoor', [
+                    { label: 'Suhu Luar (°C)', data: suhuLuarData, borderColor: 'red', borderWidth: 2, fill: false },
+                    { label: 'Kelembapan Luar (%)', data: humiLuarData, borderColor: 'blue', borderWidth: 2, fill: false }
+                ]);
+
+                sensorChartAC = createOrUpdateChart(sensorChartAC, 'sensorChartAC', [
+                    { label: 'Suhu AC (°C)', data: suhuACData, borderColor: 'purple', borderWidth: 2, fill: false },
+                    { label: 'Mode AC', data: modeACData, borderColor: 'orange', borderWidth: 2, fill: false }
+                ]);
+
+                sensorChartPPM = createOrUpdateChart(sensorChartPPM, 'sensorChartPPM', [
+                    { label: 'PPM', data: ppmData, borderColor: 'green', borderWidth: 2, fill: false }
+                ]);
+
+            } catch (error) {
+                console.error("Gagal mengambil data:", error);
+            }
+        }
+
+        async function fetchTableData() {
+            try {
+                let response = await fetch("{% url 'iot:sensorsmartac:get_data' %}");
+                let data = await response.json();
+
+                let tableBody = "";
+                data.reverse().forEach(entry => {
+                    let time = new Date(entry.timestamp).toLocaleTimeString();
+                    tableBody += `<tr>
+                        <td>${time}</td>
+                        <td>${entry.ppm}</td>
+                        <td>${entry.temp}</td>
+                        <td>${entry.humi}</td>
+                        <td>${entry.tempout}</td>
+                        <td>${entry.humiout}</td>
+                        <td>${entry.tempac}</td>
+                        <td>${entry.modeac}</td>
+                    </tr>`;
+                });
 
                 document.getElementById("data-table").innerHTML = tableBody;
             } catch (error) {
@@ -131,10 +194,14 @@
             }
         }
 
-        // Jalankan fetchData setiap 5 detik
-        setInterval(fetchData, 5000);
-        window.onload = fetchData; // Load data saat halaman pertama kali dibuka
+        window.onload = () => {
+            fetchData();
+            fetchTableData();
+            setInterval(() => {
+                fetchData();
+                fetchTableData();
+            }, 10000);
+        };
     </script>
 </div>
-
 {% endblock content %}

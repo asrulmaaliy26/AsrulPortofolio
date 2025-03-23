@@ -5,8 +5,6 @@
     <h1 class="text-center text-uppercase mt-3">Dashboard Sensor</h1>
     {% include "sensorkualitasudara/navbar.html" %}
 </div>
-
-<div class="container mt-5">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-primary fw-bold">Grafik Data Sensor Real-Time</h2>
@@ -60,6 +58,7 @@
             }
         });
 
+        
         function fetchData() {
             fetch("{% url 'iot:sensorkualitasudara:get_data' %}")
                 .then(response => response.text())
@@ -109,6 +108,57 @@
             }
             
         setInterval(fetchData, 5000); // Ambil data setiap 5 detik
+
+
+        async function fetchData() {
+            try {
+                let response = await fetch("{% url 'iot:sensorkualitasudara:get_data_from_db' %}");
+                let data = await response.json();
+        
+                let labels = [];
+                let suhuData = [];
+                let humiData = [];
+                let ppmData = [];
+                let tableBody = "";
+        
+                let latestData = data.slice(-5); // Ambil 5 data terbaru untuk grafik
+        
+                data.reverse().forEach(entry => {
+                    let time = new Date(entry.timestamp).toLocaleTimeString();
+                    let ppm = parseFloat(entry.ppm);
+                    let temp = parseFloat(entry.temp);
+                    let humi = parseFloat(entry.humi);
+        
+                    tableBody += `<tr>
+                        <td>${time}</td>
+                        <td>${ppm}</td>
+                        <td>${temp}</td>
+                        <td>${humi}</td>
+                    </tr>`;
+        
+                    if (latestData.includes(entry)) {
+                        labels.push(time);
+                        ppmData.push(ppm);
+                        suhuData.push(temp);
+                        humiData.push(humi);
+                    }
+                });
+        
+                // Update Chart
+                sensorChart.data.labels = labels;
+                sensorChart.data.datasets[0].data = suhuData;
+                sensorChart.data.datasets[1].data = humiData;
+                sensorChart.data.datasets[2].data = ppmData;
+                sensorChart.update();
+        
+                document.getElementById("data-table").innerHTML = tableBody;
+            } catch (error) {
+                console.error("Gagal mengambil data:", error);
+            }
+        }
+        
+        // Jalankan fetchData setiap 5 detik
+        setInterval(fetchData, 5000);
         window.onload = fetchData; // Load data saat halaman pertama kali dibuka
     </script>
 </div>

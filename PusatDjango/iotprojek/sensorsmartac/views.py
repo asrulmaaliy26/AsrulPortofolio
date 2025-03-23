@@ -5,37 +5,18 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 import pandas as pd
 from .models import SensorSuhuACData
-
-is_receiving = True  # Variabel global untuk mengontrol penerimaan data
+from .helper import process_sensor_data
 
 def index(request):
     return render(request, "sensorsmartac/index.html")
 
 @csrf_exempt
 def receive_data(request):
-    """ Menerima data dari sensor dan menyimpannya ke database """
-    global is_receiving
-    if not is_receiving:
-        return JsonResponse({"message": "Penerimaan data dihentikan"}, status=200)
-
-    if request.method == "POST":
-        try:
-            ppm, temp, humi = request.POST.get("ppm"), request.POST.get("temp"), request.POST.get("humi")
-            if not all([ppm, temp, humi]):
-                return JsonResponse({"error": "Data tidak lengkap"}, status=400)
-
-            # Simpan ke database
-            SensorSuhuACData.objects.create(ppm=ppm, temp=temp, humi=humi)
-
-            return JsonResponse({"message": "Data berhasil diterima"}, status=200)
-        except Exception as e:
-            return JsonResponse({"error": f"Server error: {str(e)}"}, status=500)
-
-    return JsonResponse({"error": "Hanya menerima POST"}, status=405)
+    return process_sensor_data(request, allow_extra_fields=False)
 
 def get_data(request):
     """ Mengambil data dari database dan mengembalikannya dalam format JSON """
-    data = SensorSuhuACData.objects.order_by('-timestamp').values("timestamp", "ppm", "temp", "humi")
+    data = SensorSuhuACData.objects.order_by('-timestamp').values("timestamp", "ppm", "temp", "humi", "tempout", "humiout", "tempac", "modeac")
     return JsonResponse(list(data), safe=False)
 
 def upload_dataset(request):

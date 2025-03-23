@@ -4,8 +4,8 @@
 
         <!-- Links Section -->
         <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'skripsi:index' %}">index</a>
-        <a class="nav-link {% if request.resolver_match.url_name == 'datascrapingbmkg' and request.resolver_match.namespace == 'fiturapp:scraping' %}active{% endif %}" href="{% url 'fiturapp:scraping:scrapingbmkg' %}">Fitur : Data Scraping BMKG</a>
-        <a class="nav-link {% if request.resolver_match.url_name == 'data' %}active{% endif %}" href="{% url 'skripsi:data' %}">Data API Scraping BMKG</a>
+        <!-- <a class="nav-link {% if request.resolver_match.url_name == 'datascrapingbmkg' and request.resolver_match.namespace == 'fiturapp:scraping' %}active{% endif %}" href="{% url 'fiturapp:scraping:scrapingbmkg' %}">Fitur : Data Scraping BMKG</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'data' %}active{% endif %}" href="{% url 'skripsi:data' %}">Data API Scraping BMKG</a> -->
     </div>
 </nav>
 <style>

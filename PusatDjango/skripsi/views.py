@@ -1,8 +1,3 @@
-import requests
-import pandas as pd
-import pvlib
-from datetime import datetime
-import pytz
 from django.shortcuts import render
 from fitur.scraping.views import get_bmkg_data
 
