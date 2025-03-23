@@ -3,16 +3,17 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+import datetime
 import pandas as pd
-from .models import SensorSuhuACData
+from .models import SensorData
 
 is_receiving = True  # Variabel global untuk mengontrol penerimaan data
 
-def index(request):
-    return render(request, "sensorsmartac/index.html")
+def indexdb(request):
+    return render(request, "sensorkualitasudara/indexdb.html")
 
 @csrf_exempt
-def receive_data(request):
+def receive_to_db(request):
     """ Menerima data dari sensor dan menyimpannya ke database """
     global is_receiving
     if not is_receiving:
@@ -25,7 +26,7 @@ def receive_data(request):
                 return JsonResponse({"error": "Data tidak lengkap"}, status=400)
 
             # Simpan ke database
-            SensorSuhuACData.objects.create(ppm=ppm, temp=temp, humi=humi)
+            SensorData.objects.create(ppm=ppm, temp=temp, humi=humi)
 
             return JsonResponse({"message": "Data berhasil diterima"}, status=200)
         except Exception as e:
@@ -33,12 +34,12 @@ def receive_data(request):
 
     return JsonResponse({"error": "Hanya menerima POST"}, status=405)
 
-def get_data(request):
+def get_data_from_db(request):
     """ Mengambil data dari database dan mengembalikannya dalam format JSON """
-    data = SensorSuhuACData.objects.order_by('-timestamp').values("timestamp", "ppm", "temp", "humi")
+    data = SensorData.objects.order_by('-timestamp').values("timestamp", "ppm", "temp", "humi")
     return JsonResponse(list(data), safe=False)
 
-def upload_dataset(request):
+def upload_dataset_from_db(request):
     """ Mengexport data dari database ke CSV sesuai nama file yang diinput user """
     if request.method != "POST":
         return HttpResponse("Metode tidak diizinkan.", status=405)
@@ -50,13 +51,13 @@ def upload_dataset(request):
         filename += ".csv"
 
     # Ambil data dari database
-    data = SensorSuhuACData.objects.values("timestamp", "ppm", "temp", "humi", "tempout", "humiout", "tempac", "modeac")
+    data = SensorData.objects.values("timestamp", "ppm", "temp", "humi")
     if not data:
         return HttpResponse("Tidak ada data untuk diekspor.", content_type="text/plain")
 
     # Konversi ke DataFrame dan simpan ke CSV
     df = pd.DataFrame(list(data))
-    df.rename(columns={"timestamp": "Waktu", "ppm": "PPM", "temp": "Temp", "humi": "Humidity", "tempout": "TempOut", "humiout": "HumidityOut", "tempac": "TempAC", "modeac": "ModeAC" }, inplace=True)
+    df.rename(columns={"timestamp": "Waktu", "ppm": "PPM", "temp": "Temp", "humi": "Humidity"}, inplace=True)
 
     # Simpan ke folder media
     dataset_path = settings.MEDIA_ROOT / 'data'

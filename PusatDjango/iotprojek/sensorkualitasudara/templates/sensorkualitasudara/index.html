@@ -61,7 +61,7 @@
         });
 
         function fetchData() {
-            fetch("{% url 'iot:sensorkualitasudara:get_data_from_db' %}")
+            fetch("{% url 'iot:sensorkualitasudara:get_data' %}")
                 .then(response => response.text())
                 .then(data => {
                     let lines = data.trim().split("\n");

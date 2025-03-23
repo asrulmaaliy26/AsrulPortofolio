@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <h1 class="text-center text-uppercase mt-3">Dashboard Sensor</h1>
-    {% include "sensorsmartac/navbar.html" %}
+    {% include "sensorkualitasudara/navbar.html" %}
 </div>
 
 <div class="container mt-5">
@@ -25,7 +25,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="datasetForm" action="{% url 'iot:sensorsmartac:upload_dataset' %}"
+                    <form id="datasetForm" action="{% url 'iot:sensorkualitasudara:upload_dataset_from_db' %}"
                         method="POST">
                         {% csrf_token %}
                         <div class="mb-3">
@@ -86,7 +86,7 @@
 
         async function fetchData() {
             try {
-                let response = await fetch("{% url 'iot:sensorsmartac:get_data' %}");
+                let response = await fetch("{% url 'iot:sensorkualitasudara:get_data_from_db' %}");
                 let data = await response.json();
 
                 let labels = [];

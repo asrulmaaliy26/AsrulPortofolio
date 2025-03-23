@@ -9,7 +9,6 @@ import pandas as pd
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from .models import SensorData
-import random
 
 # Global Constants
 DATA_LOG_PATH = Path("iotprojek/sensorkualitasudara/data/data.log")
@@ -20,60 +19,28 @@ is_receiving = True
 def index(request):
     return render(request, "sensorkualitasudara/index.html")
 
-# @csrf_exempt
-# def receive_data(request):
-#     global is_receiving
-#     print(f"[DEBUG] Request method: {request.method}")  # Cek metode request
-
-#     if not is_receiving:
-#         return JsonResponse({"message": "Penerimaan data dihentikan"}, status=200)
-
-#     if request.method == "POST":
-#         try:
-            
-#             print(f"[DEBUG] Raw body: {request.body}")  # Cek isi request
-#             print(f"[DEBUG] POST data: {request.POST}")  # Cek data yang diterima
-
-#             ppm, temp, humi = request.POST.get("ppm"), request.POST.get("temp"), request.POST.get("humi")
-#             if not all([ppm, temp, humi]):
-#                 return JsonResponse({"error": "Data tidak lengkap"}, status=400)
-
-#             log_entry = f"{datetime.datetime.now().strftime('%H:%M:%S')} | PPM: {ppm} | Temp: {temp} | Hum: {humi}\n"
-#             DATA_LOG_PATH.write_text(DATA_LOG_PATH.read_text() + log_entry, encoding='utf-8')
-
-            
-#             return JsonResponse({"message": "Data berhasil diterima"}, status=200)
-
-#         except Exception as e:
-#             print(f"[ERROR] {str(e)}")
-#             return JsonResponse({"error": "Server error"}, status=500)
-
-#     return JsonResponse({"error": "Hanya menerima POST"}, status=405)
-
 @csrf_exempt
 def receive_data(request):
     global is_receiving
-    print(f"[DEBUG] Request method: {request.method}")  # Debug metode request
+    print(f"[DEBUG] Request method: {request.method}")  # Cek metode request
 
     if not is_receiving:
         return JsonResponse({"message": "Penerimaan data dihentikan"}, status=200)
 
     if request.method == "POST":
         try:
-            print(f"[DEBUG] Raw body: {request.body}")  # Debug isi request
-            print(f"[DEBUG] POST data: {request.POST}")  # Debug data POST
+            
+            print(f"[DEBUG] Raw body: {request.body}")  # Cek isi request
+            print(f"[DEBUG] POST data: {request.POST}")  # Cek data yang diterima
 
             ppm, temp, humi = request.POST.get("ppm"), request.POST.get("temp"), request.POST.get("humi")
             if not all([ppm, temp, humi]):
                 return JsonResponse({"error": "Data tidak lengkap"}, status=400)
 
-            # Simpan ke database
-            SensorData.objects.create(ppm=ppm, temp=temp, humi=humi)
-
-            # Simpan juga ke file log
             log_entry = f"{datetime.datetime.now().strftime('%H:%M:%S')} | PPM: {ppm} | Temp: {temp} | Hum: {humi}\n"
             DATA_LOG_PATH.write_text(DATA_LOG_PATH.read_text() + log_entry, encoding='utf-8')
 
+            
             return JsonResponse({"message": "Data berhasil diterima"}, status=200)
 
         except Exception as e:

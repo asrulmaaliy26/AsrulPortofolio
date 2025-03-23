@@ -4,9 +4,15 @@
 <nav class="navbar navbar-light bg-light">
     <div class="d-flex flex-column">
         <a class="nav-link 
+            {% if request.resolver_match.url_name == 'indexdb' and request.resolver_match.namespace == 'iot:sensorkualitasudara' %}active{% endif %}" 
+           href="{% url 'iot:sensorkualitasudara:indexdb' %}">
+            Dashboard DB
+        </a>
+
+        <a class="nav-link 
             {% if request.resolver_match.url_name == 'index' and request.resolver_match.namespace == 'iot:sensorkualitasudara' %}active{% endif %}" 
            href="{% url 'iot:sensorkualitasudara:index' %}">
-            Dashboard
+            Dashboard File
         </a>
         
         <a class="nav-link 

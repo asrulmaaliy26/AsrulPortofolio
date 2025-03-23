@@ -7,6 +7,4 @@ app_name = 'skripsi'
 urlpatterns = [
     path('', views.index, name='index'),
     path('data', views.data, name='data'),
-    path('dataapibmkg', views.dataapibmkg, name='dataapibmkg'),
 ]
-
