@@ -1,0 +1,50 @@
+{% extends "base.html" %}  
+
+{% block content %} 
+<div class="container">     
+    <h1 class="text-center text-uppercase mt-3">Fitur Prediksi</h1>     
+    {% include "skripsi/navbar.html" %} 
+</div>  
+
+<div class="container mt-5">     
+    <h1>{{ message }}</h1>     
+    <h2>Daftar File JSON</h2>     
+    {% if error %}         
+        <div class="alert alert-danger">{{ error }}</div>     
+    {% else %}         
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">             
+                <thead class="thead-dark">
+                    <tr>                 
+                        <th>Nama File</th>                 
+                        <th>Sempel</th>                 
+                        <th>Fitur</th>                 
+                        <th>Target</th>                 
+                        <th>MAE</th>                 
+                        <th>MAPE</th>                 
+                        <th>Predicted Value</th>                 
+                        <th>Aksi</th>            
+                    </tr>             
+                </thead>
+                <tbody>
+                    {% for file in files %}             
+                    <tr>                 
+                        <td>{{ file.file_name }}</td>                   
+                        <td>{{ file.content.total_rows }}</td>      
+                        <td>{{ file.content.fitur|join:", " }}</td>                 
+                        <td>{{ file.content.target }}</td>                 
+                        <td>{{ file.content.mae|floatformat:2 }}</td>                 
+                        <td>{{ file.content.mape|floatformat:2 }}</td>                
+                        <td>{{ file.content.predicted_value }}</td>                 
+                                       
+                        <td>
+                            <a href="{% url 'mlapp:prediksi:prediksi_svr' file_name=file.content.original_file_name %}" class="btn btn-primary btn-sm">Lihat</a>
+                        </td>             
+                    </tr>             
+                    {% endfor %} 
+                </tbody>
+            </table> 
+        </div>
+    {% endif %} 
+</div>  
+{% endblock content %}

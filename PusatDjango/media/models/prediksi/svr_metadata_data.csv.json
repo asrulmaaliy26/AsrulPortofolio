@@ -1,0 +1,1 @@
+{"original_file_name": "data.csv", "fitur": ["Waktu", "PPM", "Temp"], "target": "Humidity", "mae": 0.32039812241376353, "mape": 0.0038218349110447983, "r2": 0.7449257931187876, "predicted_value": 83.38977052469194, "total_rows": 19}
