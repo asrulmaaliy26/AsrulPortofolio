@@ -3,9 +3,6 @@ from django.db import models
 # Create your models here.
 class SensorSmartACData(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
-    ppm = models.FloatField()
-    temp = models.FloatField()
-    humi = models.FloatField()
     tempout = models.FloatField()
     humiout = models.FloatField()
     tempac = models.FloatField()    

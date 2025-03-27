@@ -15,8 +15,8 @@
     <div class="row g-4">
         <div class="col-md-6">
             <div class="card shadow-lg p-4" style="max-height: 350px;">
-                <h5 class="text-center text-danger">Suhu & Kelembapan Dalam</h5>
-                <canvas id="sensorChartIndoor" width="400" height="300"></canvas>
+                <h5 class="text-center text-danger">Suhu Prediksi</h5>
+                <canvas id="hasilprediksiChart" width="400" height="300"></canvas>
             </div>
         </div>
         <div class="col-md-6">
@@ -29,12 +29,6 @@
             <div class="card shadow-lg p-4" style="max-height: 350px;">
                 <h5 class="text-center text-warning">Suhu AC & Mode AC</h5>
                 <canvas id="sensorChartAC" width="400" height="300"></canvas>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card shadow-lg p-4" style="max-height: 350px;">
-                <h5 class="text-center text-success">Suhu Pred</h5>
-                <canvas id="sensorChartPPM" width="400" height="300"></canvas>
             </div>
         </div>
     </div>
@@ -58,41 +52,35 @@
     </div>
 
     <script>
-        let sensorChartIndoor, sensorChartOutdoor, sensorChartAC, sensorChartPPM;
-
+        let hasilprediksiChart, sensorChartOutdoor, sensorChartAC;
+    
         async function fetchData() {
             try {
                 let response = await fetch("{% url 'skripsi:get_data_ac' %}");
                 let data = await response.json();
-
+    
                 let labels = [];
-                let suhuData = [];
-                let humiData = [];
                 let suhuLuarData = [];
                 let humiLuarData = [];
                 let suhuACData = [];
                 let modeACData = [];
-                let ppmData = [];
                 let hasilPred = [];
-
+    
                 let latestData = data.slice(-10); // Ambil maksimal 10 data terbaru
-
+    
                 latestData.forEach(entry => {
                     let time = new Date(entry.timestamp).toLocaleTimeString();
                     labels.push(time);
-                    ppmData.push(parseFloat(entry.ppm));
-                    suhuData.push(parseFloat(entry.temp));
-                    humiData.push(parseFloat(entry.humi));
                     suhuLuarData.push(parseFloat(entry.tempout));
                     humiLuarData.push(parseFloat(entry.humiout));
                     suhuACData.push(parseFloat(entry.tempac));
                     modeACData.push(parseFloat(entry.modeac));
                     hasilPred.push(parseFloat(entry.hasilpred));
                 });
-
+    
                 function createOrUpdateChart(chart, canvasId, datasets) {
                     let ctx = document.getElementById(canvasId).getContext('2d');
-
+    
                     if (chart) {
                         chart.data.labels = labels;
                         chart.data.datasets.forEach((dataset, index) => {
@@ -102,10 +90,13 @@
                     } else {
                         chart = new Chart(ctx, {
                             type: 'line',
-                            data: { labels, datasets },
+                            data: {
+                                labels: labels,
+                                datasets: datasets
+                            },
                             options: {
                                 responsive: true,
-                                maintainAspectRatio: true,
+                                maintainAspectRatio: false,
                                 scales: {
                                     x: { title: { display: true, text: 'Waktu' } },
                                     y: { title: { display: true, text: 'Nilai Sensor' } }
@@ -115,37 +106,32 @@
                     }
                     return chart;
                 }
-
+    
                 // Buat atau perbarui grafik
-                sensorChartIndoor = createOrUpdateChart(sensorChartIndoor, 'sensorChartIndoor', [
-                    { label: 'Suhu (°C)', data: suhuData, borderColor: 'red', borderWidth: 2, fill: false },
-                    { label: 'Kelembapan (%)', data: humiData, borderColor: 'blue', borderWidth: 2, fill: false }
+                hasilprediksiChart = createOrUpdateChart(hasilprediksiChart, 'hasilprediksiChart', [
+                    { label: 'Hasil Prediksi Suhu (°C)', data: hasilPred, borderColor: 'red', borderWidth: 2, fill: false }
                 ]);
-
+    
                 sensorChartOutdoor = createOrUpdateChart(sensorChartOutdoor, 'sensorChartOutdoor', [
                     { label: 'Suhu Luar (°C)', data: suhuLuarData, borderColor: 'red', borderWidth: 2, fill: false },
                     { label: 'Kelembapan Luar (%)', data: humiLuarData, borderColor: 'blue', borderWidth: 2, fill: false }
                 ]);
-
+    
                 sensorChartAC = createOrUpdateChart(sensorChartAC, 'sensorChartAC', [
                     { label: 'Suhu AC (°C)', data: suhuACData, borderColor: 'purple', borderWidth: 2, fill: false },
                     { label: 'Mode AC', data: modeACData, borderColor: 'orange', borderWidth: 2, fill: false }
                 ]);
-
-                sensorChartPPM = createOrUpdateChart(sensorChartPPM, 'sensorChartPPM', [
-                    { label: 'Suhu Pred', data: hasilPred, borderColor: 'green', borderWidth: 2, fill: false }
-                ]);
-
+    
             } catch (error) {
                 console.error("Gagal mengambil data:", error);
             }
         }
-
+    
         async function fetchTableData() {
             try {
                 let response = await fetch("{% url 'skripsi:get_data_ac' %}");
                 let data = await response.json();
-
+    
                 let tableBody = "";
                 data.reverse().forEach(entry => {
                     let time = new Date(entry.timestamp).toLocaleTimeString();
@@ -158,13 +144,13 @@
                         <td>${entry.hasilpred}</td>
                     </tr>`;
                 });
-
+    
                 document.getElementById("data-table").innerHTML = tableBody;
             } catch (error) {
                 console.error("Gagal mengambil data:", error);
             }
         }
-
+    
         window.onload = () => {
             fetchData();
             fetchTableData();
@@ -174,5 +160,6 @@
             }, 10000);
         };
     </script>
+    
 </div>
 {% endblock content %}

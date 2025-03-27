@@ -42,5 +42,5 @@ def receive_data_ac(request):
 
 def get_data_ac(request):
     """ Mengambil data dari database dan mengembalikannya dalam format JSON """
-    data = SensorSmartACData.objects.order_by('-timestamp').values("timestamp", "ppm", "temp", "humi", "tempout", "humiout", "tempac", "modeac", "hasilpred")
+    data = SensorSmartACData.objects.order_by('-timestamp').values("timestamp","tempout", "humiout", "tempac", "modeac", "hasilpred")
     return JsonResponse(list(data), safe=False)

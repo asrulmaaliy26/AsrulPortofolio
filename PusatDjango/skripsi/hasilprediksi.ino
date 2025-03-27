@@ -16,6 +16,11 @@
 #define DHTTYPE DHT11
 
 // **Konfigurasi WiFi**
+// const char* ssid = "Wifigratis";
+// const char* password = "12345678";
+// const char* server = "192.168.226.179"; // IP server lokal
+// const int serverPort = 3000;
+
 const char* ssid = "TOTOLINK";
 const char* password = "AHDA12345";
 const char* server = "192.168.0.103"; // IP server lokal
@@ -52,12 +57,8 @@ void setup() {
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
-    Serial.print(".");
+    Serial.println("Menghubungkan ke WiFi...");
   }
-
-  Serial.println("\nWiFi Terhubung!");
-  Serial.print("IP Address: ");
-  Serial.println(WiFi.localIP());
 
   // **Tampilkan IP Address di OLED**
   display.clearDisplay();
@@ -145,7 +146,7 @@ void kirimData() {
     String postData = "tempout=" + String(tempout) + "&humiout=" + String(humiout) + 
                       "&tempac=" + String(tempac) + "&modeac=" + String(modeac);
 
-    client.println("POST /skripsi/api/receive_data_ac/ HTTP/1.1");
+    client.println("POST /skripsi/api/receive/ HTTP/1.1");
     client.println("Host: " + String(server));
     client.println("Content-Type: application/x-www-form-urlencoded");
     client.print("Content-Length: ");
@@ -160,8 +161,6 @@ void kirimData() {
       char c = client.read();
       response += c;
     }
-    
-    client.flush(); // Membersihkan buffer setelah membaca data
     Serial.println("Response dari server: " + response);
 
     // **Tampilkan "Data Terkirim!" di OLED**
@@ -193,16 +192,15 @@ void kirimData() {
 
 // **Fungsi untuk mengekstrak nilai random dari respons JSON**
 void terimaNilaiRandom(String response) {
-  int start = response.indexOf("\"nilai_random\":") + 15;
-  if (start != -1) {
+  int pos = response.indexOf("\"nilai_random\":");
+  if (pos != -1) {
+    int start = pos + 15;
     int end = response.indexOf("}", start);
     if (end == -1) end = response.length();
     String randomStr = response.substring(start, end);
-    randomStr.trim();  // Menghilangkan spasi tambahan
     randomValue = randomStr.toInt();  // Konversi ke integer
   } else {
     Serial.println("Nilai random tidak ditemukan dalam respons!");
-    randomValue = -1;  // Default jika tidak ditemukan
   }
 
   Serial.print("Nilai Random dari server: ");
