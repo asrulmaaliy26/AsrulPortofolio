@@ -1,3 +1,4 @@
+import random
 from django.http import JsonResponse
 from .models import SensorSuhuACData
 
@@ -11,6 +12,7 @@ def process_sensor_data(request, allow_extra_fields=False):
 
     if request.method == "POST":
         try:
+            random_value = random.randint(1, 100)
             data = request.POST
             ppm, temp, humi, tempout, humiout, tempac, modeac = data.get("ppm"), data.get("temp"), data.get("humi"), data.get("tempout"), data.get("humiout"), data.get("tempac"), data.get("modeac")
             
@@ -23,7 +25,7 @@ def process_sensor_data(request, allow_extra_fields=False):
                 extra_fields["modeac"] = data.get("modeac", None)
             
             SensorSuhuACData.objects.create(ppm=ppm, temp=temp, humi=humi, tempout=tempout, humiout=humiout, tempac=tempac, modeac=modeac, **extra_fields)
-            return JsonResponse({"message": "Data berhasil diproses"}, status=200)
+            return JsonResponse({"message": "Data berhasil diproses", "nilai_random": random_value}, status=200)
         except Exception as e:
             return JsonResponse({"error": f"Kesalahan server: {str(e)}"}, status=500)
     
