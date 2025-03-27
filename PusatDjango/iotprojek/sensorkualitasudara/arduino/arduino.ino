@@ -167,7 +167,8 @@ void kirimData() {
                       "&tempout=" + String(tempout) + "&humiout=" + String(humiout) + 
                       "&tempac=" + String(tempac) + "&modeac=" + String(modeac);
 
-    client.println("POST /iot/sensorsmartac/api/receive/ HTTP/1.1");
+    // client.println("POST /iot/sensorsmartac/api/receive/ HTTP/1.1");
+    client.println("POST /skripsi/api/receive_data_ac/ HTTP/1.1");
     client.println("Host: " + String(server));
     client.println("Content-Type: application/x-www-form-urlencoded");
     client.print("Content-Length: ");
