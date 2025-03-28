@@ -177,7 +177,7 @@
                 data.reverse().forEach(entry => {
                     let time = new Date(entry.timestamp).toLocaleTimeString();
                     tableBody += `<tr>
-                        <td>${time}</td>
+                        <td>${entry.timestamp}</td>
                         <td>${entry.ppm}</td>
                         <td>${entry.temp}</td>
                         <td>${entry.humi}</td>

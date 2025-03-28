@@ -16,9 +16,14 @@
 #define DHTTYPE DHT11
 
 // **Konfigurasi WiFi**
+// const char* ssid = "Wifigratis";
+// const char* password = "12345678";
+// const char* server = "192.168.226.179"; // IP server lokal
+// const int serverPort = 3000;
+
 const char* ssid = "TOTOLINK";
 const char* password = "AHDA12345";
-const char* server = "192.168.0.103"; // IP server lokal
+const char* server = "192.168.0.111"; // IP server lokal
 const int serverPort = 3000;
 
 WiFiClient client;
@@ -26,6 +31,7 @@ MQ135 mq135_sensor(PIN_MQ135);
 DHT dht(DHTPIN, DHTTYPE);
 Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT);
 
+float temp, humi, ppm;
 float tempout, humiout, tempac;
 int modeac;
 int randomValue = 0;
@@ -52,12 +58,8 @@ void setup() {
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
-    Serial.print(".");
+    Serial.println("Menghubungkan ke WiFi...");
   }
-
-  Serial.println("\nWiFi Terhubung!");
-  Serial.print("IP Address: ");
-  Serial.println(WiFi.localIP());
 
   // **Tampilkan IP Address di OLED**
   display.clearDisplay();
@@ -82,14 +84,17 @@ void loop() {
 
 // **Fungsi membaca sensor**
 void bacaSensor() {
-  humiout = dht.readHumidity();
-  tempout = dht.readTemperature();
+  humi = dht.readHumidity();
+  temp = dht.readTemperature();
+  ppm = mq135_sensor.getPPM();
 
+  tempout = random(20, 35);
+  humiout = random(40, 80);
   tempac = random(16, 30);
   modeac = random(0, 3);
 
   // **Cek validitas data sensor**
-  if (isnan(humiout) || isnan(tempout)) {
+  if (isnan(humi) || isnan(temp)) {
     Serial.println("Gagal membaca DHT!");
     display.clearDisplay();
     display.setCursor(0, 0);
@@ -97,6 +102,10 @@ void bacaSensor() {
     display.display();
     return;
   }
+
+  Serial.print("PPM: "); Serial.print(ppm);
+  Serial.print(" | Temp: "); Serial.print(temp);
+  Serial.print(" | Hum: "); Serial.println(humi);
 
   Serial.print(" | TempOut: "); Serial.print(tempout);
   Serial.print(" | HumiOut: "); Serial.print(humiout);
@@ -109,24 +118,36 @@ void updateDisplay() {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
-
-  display.setCursor(0, 10);
-  display.print("Out T: "); display.print(tempout);
-  display.println(" C");
+  
+  display.setCursor(0, 0);
+  display.print("PPM : ");
+  display.print(ppm);
+  display.println(" PPM");
 
   display.setCursor(0, 20);
-  display.print("Out H: "); display.print(humiout);
+  display.print("Temp: ");
+  display.print(temp);
+  display.println(" C");
+
+  display.setCursor(0, 40);
+  display.print("Hum : ");
+  display.print(humi);
   display.println(" %");
 
   display.setCursor(0, 30);
-  display.print("AC T: "); display.print(tempac);
-  display.println(" C");  
+  display.print("Out T: "); display.print(tempout);
+  display.println(" C");
 
   display.setCursor(0, 40);
-  display.print("Mode AC: "); display.print(modeac);
+  display.print("Out H: "); display.print(humiout);
+  display.println(" %");
 
   display.setCursor(0, 50);
-  display.print("Hasil Pred: ");
+  display.print("AC T: "); display.print(tempac);
+  display.print("C M:"); display.print(modeac);
+
+  display.setCursor(0, 56);
+  display.print("Rand: ");
   display.print(randomValue);  // Menampilkan nilai random dari server
 
   display.display();
@@ -142,10 +163,11 @@ void kirimData() {
 
   Serial.println("Mengirim data ke server...");
   if (client.connect(server, serverPort)) {
-    String postData = "tempout=" + String(tempout) + "&humiout=" + String(humiout) + 
+    String postData = "ppm=" + String(ppm) + "&temp=" + String(temp) + "&humi=" + String(humi) + 
+                      "&tempout=" + String(tempout) + "&humiout=" + String(humiout) + 
                       "&tempac=" + String(tempac) + "&modeac=" + String(modeac);
 
-    client.println("POST /skripsi/api/receive_data_ac/ HTTP/1.1");
+    client.println("POST /iot/sensorsmartac/api/receive/ HTTP/1.1");
     client.println("Host: " + String(server));
     client.println("Content-Type: application/x-www-form-urlencoded");
     client.print("Content-Length: ");
@@ -160,8 +182,6 @@ void kirimData() {
       char c = client.read();
       response += c;
     }
-    
-    client.flush(); // Membersihkan buffer setelah membaca data
     Serial.println("Response dari server: " + response);
 
     // **Tampilkan "Data Terkirim!" di OLED**
@@ -193,16 +213,15 @@ void kirimData() {
 
 // **Fungsi untuk mengekstrak nilai random dari respons JSON**
 void terimaNilaiRandom(String response) {
-  int start = response.indexOf("\"nilai_random\":") + 15;
-  if (start != -1) {
+  int pos = response.indexOf("\"nilai_random\":");
+  if (pos != -1) {
+    int start = pos + 15;
     int end = response.indexOf("}", start);
     if (end == -1) end = response.length();
     String randomStr = response.substring(start, end);
-    randomStr.trim();  // Menghilangkan spasi tambahan
     randomValue = randomStr.toInt();  // Konversi ke integer
   } else {
     Serial.println("Nilai random tidak ditemukan dalam respons!");
-    randomValue = -1;  // Default jika tidak ditemukan
   }
 
   Serial.print("Nilai Random dari server: ");

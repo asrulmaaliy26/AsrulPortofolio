@@ -22,7 +22,7 @@
                         <th>Target</th>                 
                         <th>MAE</th>                 
                         <th>MAPE</th>                 
-                        <th>Predicted Value</th>                 
+                        <th>R2</th>                 
                         <th>Aksi</th>            
                     </tr>             
                 </thead>
@@ -35,7 +35,7 @@
                         <td>{{ file.content.target }}</td>                 
                         <td>{{ file.content.mae|floatformat:2 }}</td>                 
                         <td>{{ file.content.mape|floatformat:2 }}</td>                
-                        <td>{{ file.content.predicted_value }}</td>                 
+                        <td>{{ file.content.r2|floatformat:2 }}</td>                 
                                        
                         <td>
                             <a href="{% url 'mlapp:prediksi:prediksi_svr' file_name=file.content.original_file_name %}" class="btn btn-primary btn-sm">Lihat</a>

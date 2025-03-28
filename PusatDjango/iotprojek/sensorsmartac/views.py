@@ -17,7 +17,14 @@ def receive_data(request):
 def get_data(request):
     """ Mengambil data dari database dan mengembalikannya dalam format JSON """
     data = SensorSuhuACData.objects.order_by('-timestamp').values("timestamp", "ppm", "temp", "humi", "tempout", "humiout", "tempac", "modeac")
-    return JsonResponse(list(data), safe=False)
+
+    # Ubah timestamp ke format 24 jam
+    formatted_data = []
+    for item in data:
+        item["timestamp"] = item["timestamp"].strftime("%H")  # Format 24 jam
+        formatted_data.append(item)
+
+    return JsonResponse(formatted_data, safe=False)
 
 def upload_dataset(request):
     """ Mengexport data dari database ke CSV sesuai nama file yang diinput user """
@@ -38,7 +45,8 @@ def upload_dataset(request):
     # Konversi ke DataFrame dan simpan ke CSV
     df = pd.DataFrame(list(data))
     df.rename(columns={"timestamp": "Waktu", "ppm": "PPM", "temp": "Temp", "humi": "Humidity", "tempout": "TempOut", "humiout": "HumidityOut", "tempac": "TempAC", "modeac": "ModeAC" }, inplace=True)
-
+    
+    df["Waktu"] = pd.to_datetime(df["Waktu"]).dt.strftime("%H")
     # Simpan ke folder media
     dataset_path = settings.MEDIA_ROOT / 'data'
     dataset_path.mkdir(parents=True, exist_ok=True)

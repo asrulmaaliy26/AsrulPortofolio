@@ -1,0 +1,1 @@
+{"original_file_name": "smartac.csv", "fitur": ["Waktu", "TempOut", "HumidityOut", "TempAC", "ModeAC"], "target": "Temp", "mae": 0.4902676515185422, "mape": 0.016774887917000405, "r2": 0.5400605202049957, "predicted_value": 29.351877868672343, "total_rows": 26}

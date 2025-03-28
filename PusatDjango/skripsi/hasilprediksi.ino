@@ -4,6 +4,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <ArduinoJson.h>  // Gunakan library JSON untuk memformat data dengan benar
 
 // **Konfigurasi OLED**
 #define OLED_WIDTH 128
@@ -16,15 +17,10 @@
 #define DHTTYPE DHT11
 
 // **Konfigurasi WiFi**
-// const char* ssid = "Wifigratis";
-// const char* password = "12345678";
-// const char* server = "192.168.226.179"; // IP server lokal
-// const int serverPort = 3000;
-
 const char* ssid = "TOTOLINK";
 const char* password = "AHDA12345";
-const char* server = "192.168.0.103"; // IP server lokal
-const int serverPort = 3000;
+const char* server = "192.168.0.111";  // IP server Django
+const int serverPort = 3000;  // Pastikan port sesuai dengan Django
 
 WiFiClient client;
 MQ135 mq135_sensor(PIN_MQ135);
@@ -33,7 +29,7 @@ Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT);
 
 float tempout, humiout, tempac;
 int modeac;
-int randomValue = 0;
+int hasil_prediksi = 0;
 unsigned long lastUpdate = 0;
 const long updateInterval = 10000; // Update setiap 10 detik
 
@@ -85,7 +81,6 @@ void loop() {
 void bacaSensor() {
   humiout = dht.readHumidity();
   tempout = dht.readTemperature();
-
   tempac = random(16, 30);
   modeac = random(0, 3);
 
@@ -99,7 +94,7 @@ void bacaSensor() {
     return;
   }
 
-  Serial.print(" | TempOut: "); Serial.print(tempout);
+  Serial.print("TempOut: "); Serial.print(tempout);
   Serial.print(" | HumiOut: "); Serial.print(humiout);
   Serial.print(" | TempAC: "); Serial.print(tempac);
   Serial.print(" | ModeAC: "); Serial.println(modeac);
@@ -128,12 +123,12 @@ void updateDisplay() {
 
   display.setCursor(0, 50);
   display.print("Hasil Pred: ");
-  display.print(randomValue);  // Menampilkan nilai random dari server
+  display.print(hasil_prediksi);
 
   display.display();
 }
 
-// **Fungsi mengirim data ke server**
+// **Fungsi mengirim data ke server dalam format JSON**
 void kirimData() {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi terputus! Mencoba koneksi ulang...");
@@ -143,16 +138,24 @@ void kirimData() {
 
   Serial.println("Mengirim data ke server...");
   if (client.connect(server, serverPort)) {
-    String postData = "tempout=" + String(tempout) + "&humiout=" + String(humiout) + 
-                      "&tempac=" + String(tempac) + "&modeac=" + String(modeac);
+    // **Buat JSON data**
+    StaticJsonDocument<200> jsonDoc;
+    jsonDoc["tempout"] = tempout;
+    jsonDoc["humiout"] = humiout;
+    jsonDoc["tempac"] = tempac;
+    jsonDoc["modeac"] = modeac;
+    
+    String jsonString;
+    serializeJson(jsonDoc, jsonString);
 
-    client.println("POST /skripsi/api/receive/ HTTP/1.1");
+    // **Kirim permintaan HTTP POST**
+    client.println("POST /skripsi/api/receive_data_ac/ HTTP/1.1");
     client.println("Host: " + String(server));
-    client.println("Content-Type: application/x-www-form-urlencoded");
+    client.println("Content-Type: application/json");
     client.print("Content-Length: ");
-    client.println(postData.length());
+    client.println(jsonString.length());
     client.println();
-    client.println(postData);
+    client.println(jsonString);
 
     // Tunggu respons dari server
     delay(500);
@@ -192,17 +195,21 @@ void kirimData() {
 
 // **Fungsi untuk mengekstrak nilai random dari respons JSON**
 void terimaNilaiRandom(String response) {
-  int pos = response.indexOf("\"nilai_random\":");
-  if (pos != -1) {
-    int start = pos + 15;
-    int end = response.indexOf("}", start);
-    if (end == -1) end = response.length();
-    String randomStr = response.substring(start, end);
-    randomValue = randomStr.toInt();  // Konversi ke integer
-  } else {
-    Serial.println("Nilai random tidak ditemukan dalam respons!");
+  StaticJsonDocument<200> doc;
+  DeserializationError error = deserializeJson(doc, response);
+
+  if (error) {
+    Serial.print("Gagal parsing JSON: ");
+    Serial.println(error.f_str());
+    return;
   }
 
-  Serial.print("Nilai Random dari server: ");
-  Serial.println(randomValue);
+  if (doc.containsKey("hasil_prediksi")) {
+    hasil_prediksi = doc["hasil_prediksi"];
+    Serial.print("Hasil Prediksi dari server: ");
+    Serial.println(hasil_prediksi);
+  } else {
+    Serial.println("Key 'hasil_prediksi' tidak ditemukan dalam respons!");
+  }
 }
+

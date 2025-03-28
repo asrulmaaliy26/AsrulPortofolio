@@ -1,1 +1,1 @@
-{"original_file_name": "data.csv", "fitur": ["Waktu", "PPM", "Temp"], "target": "Humidity", "mae": 0.32039812241376353, "mape": 0.0038218349110447983, "r2": 0.7449257931187876, "predicted_value": 83.38977052469194, "total_rows": 19}
+{"original_file_name": "data.csv", "fitur": ["Waktu", "TempOut", "HumidityOut", "TempAC", "ModeAC"], "target": "Temp", "mae": 0.29860713954318596, "mape": 0.009983103569976528, "r2": 0.5368508456604432, "predicted_value": 29.105484724380567, "total_rows": 40}

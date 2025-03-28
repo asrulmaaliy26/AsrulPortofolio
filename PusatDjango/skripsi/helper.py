@@ -4,7 +4,7 @@ from .models import SensorSmartACData
 
 is_receiving = True  # Variabel global untuk mengontrol penerimaan data
 
-def process_sensor_data(request, allow_extra_fields=False):
+def process_sensor_data(request):
     """ Fungsi helper untuk memproses dan menyimpan data sensor """
     global is_receiving
     if not is_receiving:
@@ -15,18 +15,20 @@ def process_sensor_data(request, allow_extra_fields=False):
             random_value = random.randint(1, 100)
             
             data = request.POST
-            tempout, humiout, tempac, modeac = data.get("tempout"), data.get("humiout"), data.get("tempac"), data.get("modeac")
-            
+            tempout = data.get("tempout")
+            humiout = data.get("humiout")
+            tempac = data.get("tempac")
+            modeac = data.get("modeac")
             
             if not all([tempout, humiout, tempac, modeac]):
                 return JsonResponse({"error": "Data utama tidak lengkap"}, status=400)
             
-            extra_fields = {}
-            if allow_extra_fields:
-                extra_fields["tempac"] = data.get("tempac", None)
-                extra_fields["modeac"] = data.get("modeac", None)
-            
-            SensorSmartACData.objects.create(tempout=tempout, humiout=humiout, tempac=tempac, modeac=modeac, hasilpred=random_value, **extra_fields)
+            SensorSmartACData.objects.create(
+                tempout=tempout, 
+                humiout=humiout, 
+                tempac=tempac, 
+                modeac=modeac, 
+                hasilpred=random_value)
             return JsonResponse({"message": "Data berhasil diproses", "nilai_random": random_value}, status=200)
         except Exception as e:
             return JsonResponse({"error": f"Kesalahan server: {str(e)}"}, status=500)
