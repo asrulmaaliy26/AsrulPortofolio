@@ -1,12 +1,12 @@
 import requests
 
-url = "http://127.0.0.1:3000/skripsi/api/receive_data_ac/"
+url = "http://127.0.0.1:8000/skripsi/api/receive_data_ac/"
 headers = {"Content-Type": "application/json"}
 data = {
-    "tempout": 1000000,
-    "humiout": 6000000,
-    "tempac": 22000000,
-    "modeac": 3
+    "tempout": 12,
+    "humiout": 12,
+    "tempac": 12,
+    "modeac": 12
 }
 
 response = requests.post(url, json=data, headers=headers)

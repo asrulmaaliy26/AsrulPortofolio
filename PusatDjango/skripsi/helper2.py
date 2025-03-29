@@ -90,15 +90,15 @@ def process_sensor_data(request):
         except Exception as e:
             return JsonResponse({"error": f"Kesalahan memuat model: {str(e)}"}, status=500)
 
-        # Simpan ke database
-        SensorSmartACData.objects.create(
-            # waktu=timestamp,
-            tempout=tempout,
-            humiout=humiout,
-            tempac=tempac,
-            modeac=modeac,
-            hasilpred=hasil_prediksi,
-        )
+        # # Simpan ke database
+        # SensorSmartACData.objects.create(
+        #     # waktu=timestamp,
+        #     tempout=tempout,
+        #     humiout=humiout,
+        #     tempac=tempac,
+        #     modeac=modeac,
+        #     hasilpred=hasil_prediksi,
+        # )
 
         return JsonResponse({
             "message": "Data berhasil disimpan",

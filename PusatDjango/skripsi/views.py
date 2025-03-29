@@ -45,71 +45,61 @@ def get_data_ac(request):
     data = SensorSmartACData.objects.order_by('-timestamp').values("timestamp","tempout", "humiout", "tempac", "modeac", "hasilpred")
     return JsonResponse(list(data), safe=False)
 
-from django.shortcuts import render
-from django.http import JsonResponse
 import joblib
 import json
-import numpy as np
+import pandas as pd
 from pathlib import Path
 from django.conf import settings
-from sklearn.preprocessing import StandardScaler
-
-# Path ke model
-MODEL_DIR = Path(settings.MEDIA_ROOT) / "models/prediksi"
-MODEL_FILE = MODEL_DIR / "svr_model_smartac.csv.pkl"
-METADATA_FILE = MODEL_DIR / "svr_metadata_smartac.csv.json"
+from django.shortcuts import render
+from django.http import JsonResponse
+from sklearn.preprocessing import MinMaxScaler
 
 def manual_prediction(request):
-    hasil_prediksi = None
-    error_message = None
+    model_path = Path(settings.MEDIA_ROOT) / "models/prediksi"
+    model_file = model_path / f"svr_model_data.csv.joblib"
+    metadata_file = model_path / f"svr_metadata_data.csv.json"
+    scaler_path = model_path / f"scaler_data.csv.joblib"
+
+    fitur = []
+    target = ""
+    predicted_value = None
+
+    # Cek apakah metadata tersedia
+    if metadata_file.exists():
+        with open(metadata_file, "r") as f:
+            metadata = json.load(f)
+        fitur = metadata.get("fitur", [])
+        target = metadata.get("target", "")
 
     if request.method == "POST":
-        try:
-            # Periksa apakah model dan metadata tersedia
-            if not MODEL_FILE.exists() or not METADATA_FILE.exists():
-                error_message = "Model atau metadata tidak tersedia."
-            else:
-                # Muat metadata
-                with open(METADATA_FILE, "r") as f:
-                    metadata = json.load(f)
+        input_data = []
 
-                fitur = metadata.get("fitur", [])
-                target = metadata.get("target", "")
+        # Ambil nilai input dari form
+        for f in fitur:
+            try:
+                value = float(request.POST.get(f, 0))
+                input_data.append(value)
+            except ValueError:
+                return JsonResponse({"error": f"Input untuk {f} harus berupa angka."}, status=400)
 
-                if not fitur or not target:
-                    error_message = "Metadata model tidak valid."
-                else:
-                    # Ambil input data berdasarkan fitur dalam metadata
-                    input_data = []
-                    for fitur_name in fitur:
-                        value = request.POST.get(fitur_name.lower(), None)
-                        if value is not None:
-                            try:
-                                input_data.append(float(value))  # Konversi ke float
-                            except ValueError:
-                                error_message = f"Input untuk {fitur_name} tidak valid."
-                                break
-                        else:
-                            error_message = f"Fitur {fitur_name} tidak ditemukan dalam input."
-                            break
+        if model_file.exists() and scaler_path.exists():
+            try:
+                # Load model dan scaler
+                svr = joblib.load(model_file)
+                scaler = joblib.load(scaler_path)
 
-                    # Jika tidak ada error dalam input, lanjutkan prediksi
-                    if not error_message and len(input_data) == len(fitur):
-                        # Standarisasi input data
-                        scaler = StandardScaler()
-                        input_data = np.array(input_data).reshape(1, -1)
-                        input_scaled = scaler.fit_transform(input_data)
+                # Skalakan input dengan scaler yang sama
+                input_data_scaled = scaler.transform([input_data])
 
-                        # Muat model SVR dan lakukan prediksi
-                        svr_model = joblib.load(MODEL_FILE)
-                        hasil_prediksi = svr_model.predict(input_scaled)[0]
-                    else:
-                        error_message = "Data input tidak sesuai dengan model."
-
-        except ValueError:
-            error_message = "Input tidak valid, pastikan angka sudah benar."
+                # Prediksi nilai
+                predicted_value = svr.predict(input_data_scaled)[0]
+            except Exception as e:
+                return JsonResponse({"error": f"Gagal melakukan prediksi: {str(e)}"}, status=500)
+        else:
+            return JsonResponse({"error": "Model atau scaler tidak ditemukan. Silakan lakukan pelatihan model terlebih dahulu."}, status=500)
 
     return render(request, "skripsi/manual_prediction.html", {
-        "hasil_prediksi": hasil_prediksi,
-        "error_message": error_message,
+        "fitur": fitur,
+        "target": target,
+        "predicted_value": predicted_value,
     })
