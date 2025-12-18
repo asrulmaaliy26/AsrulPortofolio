@@ -12,19 +12,30 @@ def process_sensor_data(request):
 
     if request.method == "POST":
         try:
-            #dari ESP ngepost kan ke sini dtangkap lah ini disimpan ke data
             random_value = random.randint(1, 100)
+
             data = request.POST
-            temp, humi, tempout, humiout, tempac, modeac = data.get("temp"), data.get("humi"), data.get("tempout"), data.get("humiout"), data.get("tempac"), data.get("modeac")
-            
-            ppm = 0
-            #lalu di validasi secukupnya
-            if not all([ppm, temp, humi]):
+            temp = data.get("temp")
+            humi = data.get("humi")
+            tempout = data.get("tempout")
+            humiout = data.get("humiout")
+            tempac = data.get("tempac")
+            modeac = data.get("modeac")
+
+            if not all([temp, humi, tempout, humiout, tempac, modeac]):
                 return JsonResponse({"error": "Data utama tidak lengkap"}, status=400)
-            
-            SensorSuhuACData.objects.create(ppm=ppm, temp=temp, humi=humi, tempout=tempout, humiout=humiout, tempac=tempac, modeac=modeac)
+
+            SensorSuhuACData.objects.create(
+                temp=temp,
+                humi=humi,
+                tempout=tempout,
+                humiout=humiout,
+                tempac=tempac,
+                modeac=modeac,
+                # hasilpred=random_value
+                )
             return JsonResponse({"message": "Data berhasil diproses", "nilai_random": random_value}, status=200)
         except Exception as e:
             return JsonResponse({"error": f"Kesalahan server: {str(e)}"}, status=500)
-    
+
     return JsonResponse({"error": "Metode tidak diperbolehkan"}, status=405)

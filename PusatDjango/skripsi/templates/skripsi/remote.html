@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center text-uppercase mt-3">Dashboard Skripsi</h1>
+    {% include "skripsi/navbar.html" %}
+</div>
+
+<div class="container mt-5">
+    <div class="card shadow-lg rounded-4 p-4" style="width: 350px;">
+        <h3 class="text-center mb-3 fw-bold">Smart AC Remote</h3>
+
+        <!-- Status Display -->
+        <div class="text-center mb-3">
+            <p>Suhu: <span class="fw-bold text-primary fs-4">{{ temperature }}°C</span></p>
+            {% comment %}
+              
+            <p>Mode: <span class="fw-medium">{{ mode }}</span></p>
+            <p>Fan: <span class="fw-medium">{{ fan_speed }}</span></p>
+            
+            {% endcomment %}
+        </div>
+
+        <!-- Temperature Control -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <form method="post" action="{% url 'skripsi:decrease_temp' %}">
+                {% csrf_token %}
+                <button class="btn btn-outline-primary px-3">-</button>
+            </form>
+            <span class="fs-5 fw-semibold">{{ temperature }}°C</span>
+            <form method="post" action="{% url 'skripsi:increase_temp' %}">
+                {% csrf_token %}
+                <button class="btn btn-outline-primary px-3">+</button>
+            </form>
+        </div>
+
+        <!-- Mode Selection -->
+         {% comment %}
+           
+         <form method="post" action="{% url 'skripsi:change_mode' %}" class="mb-3">
+             {% csrf_token %}
+             <div class="mb-2">
+                <select name="mode" class="form-select">
+                    <option value="Cool" {% if mode == "Cool" %}selected{% endif %}>Cool</option>
+                    <option value="Dry" {% if mode == "Dry" %}selected{% endif %}>Dry</option>
+                    <option value="Fan" {% if mode == "Fan" %}selected{% endif %}>Fan</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-secondary w-100">Set Mode</button>
+        </form>
+        
+        {% endcomment %}
+        
+        <!-- Fan Speed -->
+        {% comment %}
+        <form method="post" action="{% url 'skripsi:change_fan_speed' %}">
+            {% csrf_token %}
+            <div class="mb-2">
+                <select name="fan_speed" class="form-select">
+                    <option value="Low" {% if fan_speed == "Low" %}selected{% endif %}>Low</option>
+                    <option value="Medium" {% if fan_speed == "Medium" %}selected{% endif %}>Medium</option>
+                    <option value="High" {% if fan_speed == "High" %}selected{% endif %}>High</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-secondary w-100">Set Fan Speed</button>
+        </form>
+        {% endcomment %}
+    </div>
+
+    
+</div>
+{% endblock content %}

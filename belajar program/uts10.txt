@@ -1,0 +1,22 @@
+1. sebtukan salah 1 bahasa pemrograman?
+2. bahasa javascript digunakan untuk memprogram apa?
+3. bagaimana cara menjalankan javascript?
+4. sebutkan 2 tipe data ?
+
+let warna = "informatika"
+
+5. mana dari kode diatas yang disebut variabel?
+
+console.log(typeof nama);
+
+6. jika kode diatas dijalankan maka akan muncul apa?
+
+let panjang = 5;
+let lebar = 3;
+let luas = panjang * lebar;
+console.log("Luas = " + luas);
+
+7. apa hasil dari kode diatas?
+8. buatkan variabel untuk menghitung keliling?
+9. 
+10. 

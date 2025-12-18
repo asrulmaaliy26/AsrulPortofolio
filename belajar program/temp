@@ -1,0 +1,379 @@
+Berikut adalah **Materi Lengkap Bab 11: "AI untuk Menambahkan Interaktivitas (JavaScript)"**, terdiri dari **2 pertemuan**, dirancang untuk mengembangkan kemampuan siswa dalam **memanfaatkan AI untuk membuat fitur interaktif** pada web seperti tombol, input, kondisi, dan respon dinamis—semua menggunakan **JavaScript hasil AI** yang dianalisis dan dimodifikasi.
+
+---
+
+# **Bab 11: AI untuk Menambahkan Interaktivitas**
+
+---
+
+## **Pertemuan 1: Meminta Interaktivitas Dasar dengan Bantuan AI**
+
+### **A. Pendahuluan (10 menit)**
+
+**Guru membuka dengan:**
+
+> “Kalian sudah pernah membuat tombol yang bisa memunculkan pesan, atau menghitung angka. Hari ini, kita akan gunakan **AI untuk membuat fitur interaktif yang lebih kompleks**, seperti mengubah warna saat diklik, membuat sapaan otomatis, atau memvalidasi input.”
+
+**Tujuan disampaikan kepada siswa:**
+
+* Mampu membuat prompt AI untuk menghasilkan interaksi berbasis JavaScript.
+* Menjalankan dan mengevaluasi hasil kode interaktif dari AI.
+
+---
+
+### **B. Isi Materi (60 menit)**
+
+#### **1. Contoh Prompt Interaktif (15 menit)**
+
+**Guru menunjukkan contoh prompt:**
+
+> *“Buatkan halaman HTML dengan tombol yang jika diklik akan mengubah warna latar belakang.”*
+
+**Hasil AI (contoh):**
+
+```html
+<button onclick="ubahWarna()">Ganti Warna</button>
+
+<script>
+function ubahWarna() {
+  document.body.style.backgroundColor = "lightblue";
+}
+</script>
+```
+
+**Diskusi:**
+
+* Kapan fungsi `ubahWarna()` dijalankan?
+* Bagaimana jika ingin mengubah ke warna acak?
+
+---
+
+#### **2. Aktivitas Siswa: Buat Prompt Interaksi Sendiri (30 menit)**
+
+**Langkah:**
+
+* Siswa menulis prompt interaktif sendiri ke AI.
+
+  * Contoh:
+
+    * “Buat tombol yang menampilkan sapaan berdasarkan waktu.”
+    * “Buat input nama dan tombol yang menampilkan pesan sapaan.”
+
+**Langkah kerja:**
+
+1. Minta kode dari AI.
+2. Salin ke editor (Replit/Codepen).
+3. Uji coba dan catat hasil.
+
+---
+
+#### **3. Evaluasi Cepat Hasil Interaksi (15 menit)**
+
+**Tugas berpasangan:**
+
+* Tukar hasil dengan teman.
+* Uji halaman teman.
+* Jawab 2 pertanyaan:
+
+  * Apa fungsi utama interaksinya?
+  * Apakah kamu bisa memahami logika JavaScript-nya?
+
+---
+
+### **C. Penutup (10 menit)**
+
+**Guru menyimpulkan:**
+
+> “Kita bisa minta AI membuat berbagai interaksi web. Tapi kita tetap harus **memahami struktur logikanya** agar bisa menyesuaikan dan memperbaiki.”
+
+**Tugas rumah (opsional):**
+
+> “Minta AI membuat tombol ‘Cek Umur’. Jika umur < 17 → tampilkan 'belum cukup umur', jika ≥ 17 → tampilkan 'boleh lanjut'. Uji kodenya!”
+
+---
+
+## **Pertemuan 2: Modifikasi & Kombinasi Interaksi dari AI**
+
+### **A. Pendahuluan (5–10 menit)**
+
+**Guru membuka:**
+
+> “Hari ini kita akan jadi editor AI. Kalian akan menggabungkan dua interaksi atau memodifikasi hasil AI agar web kalian menjadi lebih dinamis dan kompleks.”
+
+**Tujuan:**
+
+* Memodifikasi hasil JavaScript dari AI.
+* Menggabungkan beberapa logika interaktif dalam satu halaman.
+
+---
+
+### **B. Isi Materi (60 menit)**
+
+#### **1. Studi Kasus: Gabung Interaksi (10 menit)**
+
+**Guru menunjukkan 2 hasil AI:**
+
+* Tombol ubah warna
+* Input nama dan sapaan
+
+**Tantangan ke siswa:**
+
+> “Gabungkan keduanya: saat nama diisi dan tombol diklik, latar berubah dan pesan sapaan muncul.”
+
+---
+
+#### **2. Aktivitas Siswa: Kombinasi Interaksi (35 menit)**
+
+**Langkah:**
+
+* Siswa ambil hasil AI dari pertemuan sebelumnya.
+* Gabungkan dua fitur berbeda, misalnya:
+
+  * Input + alert
+  * Input + perubahan warna/teks
+  * Dua tombol dengan aksi berbeda
+
+**Target:**
+
+* Fungsi berjalan tanpa error
+* Struktur kode bisa dibaca dan dipahami
+
+**Bonus bagi siswa cepat:** Tambahkan fitur `if/else` atau `event listener`.
+
+---
+
+#### **3. Presentasi Singkat & Uji Teman (15 menit)**
+
+**Siswa menunjukkan hasilnya (berpasangan atau kelompok kecil):**
+
+* Apa interaksinya?
+* Apa hasil modifikasi dari AI?
+* Apakah kalian paham seluruh alur kodenya?
+
+---
+
+### **C. Penutup (10 menit)**
+
+**Guru menyimpulkan:**
+
+> “Dengan memahami hasil AI dan berani menggabungkannya, kalian bisa menciptakan halaman web yang lebih hidup dan personal.”
+
+**Refleksi akhir:**
+
+> “Setelah belajar bersama AI, bagian mana yang paling menantang dan mana yang paling membantu?”
+
+---
+
+## **Ringkasan Aktivitas Bab 11**
+
+| Pertemuan | Aktivitas Inti Siswa                                            | Tujuan Pembelajaran                                                    |
+| --------- | --------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| 1         | Membuat prompt interaksi JS ke AI, menjalankan dan mengevaluasi | Menggunakan AI untuk membangun fitur interaktif sederhana dengan JS    |
+| 2         | Menggabungkan dan memodifikasi fitur JS hasil AI                | Meningkatkan pemahaman logika JS dengan modifikasi dan kombinasi fitur |
+
+---
+
+## **Media & Alat Pendukung**
+
+* Akses ke AI (ChatGPT, Claude, dsb) atau bantuan guru
+* Editor HTML/JS online (Replit, CodePen)
+* Template prompt: interaksi waktu, warna, form, dll
+* Lembar kerja “analisis logika kode JS”
+
+---
+
+Jika kamu ingin:
+
+* **Template proyek penggabungan interaksi**
+* **Lembar evaluasi logika**
+* **Rubrik penilaian interaktivitas web**
+
+Saya siap bantu buatkan juga.
+
+Siap lanjut ke **Bab 12: Proyek Akhir – Website Mini dengan Bantuan AI**?
+
+
+Berikut adalah **Materi Lengkap Bab 12: "Proyek Akhir – Website Mini dengan Bantuan AI"**, sebagai bab penutup modul kelas 10. Proyek ini mengajak siswa **mengintegrasikan seluruh keterampilan** dari bab sebelumnya: HTML, CSS, JavaScript, serta kemampuan **berkolaborasi dengan AI** untuk membangun **halaman web mini yang utuh dan personal**.
+
+---
+
+# **Bab 12: Proyek Akhir – Website Mini dengan Bantuan AI**
+
+---
+
+## **Struktur Umum Bab 12**
+
+* **Durasi**: 2 pertemuan (masing-masing 80 menit)
+* **Output**: Satu halaman web utuh berisi konten, desain, dan interaksi sederhana
+* **Tools**: Replit, CodePen, atau editor HTML lokal + AI pendamping (ChatGPT/alternatif)
+
+---
+
+## **Pertemuan 1: Rancang dan Bangun Website Mini**
+
+### **A. Pendahuluan (10 menit)**
+
+**Guru membuka:**
+
+> “Hari ini kalian akan mulai membangun **website minimu sendiri**. Boleh tentang diri sendiri, hobi, komunitas, atau topik favorit. Gunakan bantuan AI sebagai partner coding, bukan sebagai tukang copas. Tugas kalian adalah membuat web yang ‘hidup’ dan ‘bermakna’.”
+
+**Tujuan disampaikan:**
+
+* Siswa mampu merancang isi, tampilan, dan fungsi halaman.
+* Siswa memanfaatkan AI sebagai alat bantu dalam menulis dan mengembangkan kode.
+
+---
+
+### **B. Isi Materi (60 menit)**
+
+#### **1. Brainstorm & Perencanaan (15 menit)**
+
+**Tugas siswa (boleh di kertas atau Google Docs):**
+
+* Tema website (misal: diri sendiri, musik favorit, resep makanan)
+* Struktur konten:
+
+  * Judul halaman
+  * Paragraf teks
+  * Gambar
+  * Interaksi (form, tombol, alert, dll)
+* Gaya visual yang diinginkan (minimalis, warna cerah, tema gelap, dll)
+
+---
+
+#### **2. Membuat Website dengan Bantuan AI (45 menit)**
+
+**Langkah:**
+
+* Siswa menulis prompt ke AI, contoh:
+
+> *“Buatkan halaman HTML berjudul 'Tentang Kucing', dengan paragraf deskripsi, satu gambar, tombol yang jika diklik akan menampilkan alert 'Meow!' dan warna latar biru.”*
+
+**Proses:**
+
+1. Salin dan uji kode di editor online.
+2. Identifikasi bagian kode HTML, CSS, dan JavaScript.
+3. **Modifikasi konten dan tampilan** agar sesuai dengan ide pribadi.
+
+---
+
+### **C. Penutup (10 menit)**
+
+**Guru menyimpulkan:**
+
+> “Hari ini kalian sudah mulai membangun website sendiri. Di pertemuan berikutnya, kita akan menyempurnakan dan mempresentasikan karya kalian.”
+
+**Tugas rumah:**
+
+> “Perbaiki halaman websitemu agar lebih menarik. Siapkan untuk ditampilkan minggu depan.”
+
+---
+
+## **Pertemuan 2: Penyempurnaan & Presentasi Website**
+
+### **A. Pendahuluan (5–10 menit)**
+
+**Guru membuka:**
+
+> “Hari ini kita akan menyelesaikan proyek website mini kalian. Fokus utama adalah penyempurnaan dan presentasi—bagaimana kalian menyampaikan gagasan dengan visual dan interaksi.”
+
+**Tujuan:**
+
+* Menyempurnakan konten, tampilan, dan fungsi web.
+* Melatih siswa mempresentasikan hasil karyanya.
+
+---
+
+### **B. Isi Materi (60 menit)**
+
+#### **1. Tahap Penyempurnaan Mandiri (30 menit)**
+
+**Siswa diberi waktu untuk:**
+
+* Memperbaiki tata letak
+* Memastikan interaksi berjalan baik
+* Menambahkan elemen tambahan:
+
+  * Ganti font
+  * Tambahkan gambar latar
+  * Tambahkan fitur `prompt` atau tombol tambahan
+
+**Guru berperan sebagai pembimbing dan reviewer cepat.**
+
+---
+
+#### **2. Presentasi Mini Proyek (30 menit)**
+
+**Format:**
+
+* 1–2 menit per siswa/kelompok kecil
+* Tampilkan halaman di layar atau share link
+* Ceritakan:
+
+  * Apa temanya?
+  * Apa yang dibuat sendiri?
+  * Apa yang dihasilkan oleh AI?
+  * Apa bagian favorit dan yang paling menantang?
+
+**Penilaian formatif oleh guru + apresiasi kelas.**
+
+---
+
+### **C. Penutup (10 menit)**
+
+**Guru menyimpulkan dan refleksi akhir:**
+
+> “Dari awal tahun kalian belajar membangun web—dari struktur, desain, logika, hingga cara memanfaatkan AI. Website mini kalian hari ini adalah bukti bahwa kalian bukan hanya pengguna teknologi, tapi pencipta.”
+
+**Pertanyaan reflektif:**
+
+* Apa yang paling kalian pelajari tentang proses membuat web?
+* Bagaimana peran AI dalam membantumu belajar dan berkarya?
+* Apakah kalian merasa siap membangun proyek yang lebih besar di masa depan?
+
+---
+
+## **Struktur Minimum Website Mini**
+
+| Elemen Wajib        | Keterangan                                          |
+| ------------------- | --------------------------------------------------- |
+| Judul (`<h1>`)      | Judul halaman (topik bebas)                         |
+| Paragraf (`<p>`)    | Deskripsi isi                                       |
+| Gambar (`<img>`)    | Minimal 1 gambar relevan                            |
+| Tombol (`<button>`) | Interaksi saat diklik (alert, prompt, ubah warna)   |
+| CSS                 | Warna latar, font, border, tata letak               |
+| JavaScript          | Minimal 1 fungsi interaktif (mengubah teks, prompt) |
+
+---
+
+## **Penilaian Proyek Website Mini (Opsional Rubrik)**
+
+| Aspek                              | Skor Maksimal |
+| ---------------------------------- | ------------- |
+| Struktur HTML rapi dan lengkap     | 20            |
+| CSS meningkatkan tampilan          | 20            |
+| Interaksi JS berjalan baik         | 20            |
+| Ide dan orisinalitas konten        | 20            |
+| Refleksi & pemahaman terhadap kode | 20            |
+| **Total**                          | **100**       |
+
+---
+
+## **Media & Alat Pendukung**
+
+* Template prompt AI (desain, interaksi, efek visual)
+* Rubrik penilaian proyek
+* Akses ke AI dan editor web (Replit, CodePen, dsb)
+* Slide: "Tips Menggabungkan HTML + CSS + JS"
+
+---
+
+Jika kamu ingin:
+
+* **Contoh proyek siswa**
+* **Template refleksi akhir tahun**
+* **Sertifikat atau penghargaan karya terbaik**
+
+Saya siap bantu buatkan.
+
+Modul kelas 10 sudah selesai. Apakah kamu ingin saya bantu merancang **modul kelas 11 berbasis proyek AI lanjutan**?

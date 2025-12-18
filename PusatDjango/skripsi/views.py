@@ -17,6 +17,9 @@ is_receiving = True
 def index(request):
     return render(request, 'skripsi/index.html')
 
+def remote(request):
+    return render(request, 'skripsi/remote.html')
+
 def data(request):
     context = get_bmkg_data(request) 
     # Cek jika terjadi error saat mengambil data

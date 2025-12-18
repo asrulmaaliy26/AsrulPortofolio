@@ -12,7 +12,7 @@ def index(request):
 
 @csrf_exempt
 def receive_data(request):
-    return process_sensor_data(request, allow_extra_fields=False)
+    return process_sensor_data(request)
 
 def get_data(request):
     """ Mengambil data dari database dan mengembalikannya dalam format JSON """

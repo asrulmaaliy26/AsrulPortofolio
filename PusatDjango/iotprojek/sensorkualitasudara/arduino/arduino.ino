@@ -1,229 +1,220 @@
-#include <ESP8266WiFi.h>
-#include <MQ135.h>
-#include <DHT.h>
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+// please check the video
+// https://www.youtube.com/watch?v=xj-j5zgZnoo
 
-// **Konfigurasi OLED**
-#define OLED_WIDTH 128
-#define OLED_HEIGHT 64
-#define OLED_ADDR 0x3C
-
-// **Pin Sensor**
-#define PIN_MQ135 A0
-#define DHTPIN D4
-#define DHTTYPE DHT11
-
-// **Konfigurasi WiFi**
-// const char* ssid = "Wifigratis";
-// const char* password = "12345678";
-// const char* server = "192.168.226.179"; // IP server lokal
-// const int serverPort = 3000;
-
-const char* ssid = "TOTOLINK";
+#include <ESP8266WebServer.h>
+#include <ESP8266mDNS.h>
+#include <IRsend.h>
+const char* ssid = "TP-Link_0260";
 const char* password = "AHDA12345";
-const char* server = "192.168.0.111"; // IP server lokal
-const int serverPort = 3000;
 
-WiFiClient client;
-MQ135 mq135_sensor(PIN_MQ135);
-DHT dht(DHTPIN, DHTTYPE);
-Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT);
+MDNSResponder mdns;
 
-float temp, humi, ppm;
-float tempout, humiout, tempac;
-int modeac;
-int randomValue = 0;
-unsigned long lastUpdate = 0;
-const long updateInterval = 10000; // Update setiap 10 detik
+String Domain = "home";
+String switch1name = "Light";
+String switch1 = "OFF";
+String Fan = "OFF";
+String AC = "OFF";
+int currentTemp = 24; // Suhu awal (ubah sesuai kebutuhan)
 
-void setup() {
-  Serial.begin(115200);
+ESP8266WebServer server(80);
 
-  // **Inisialisasi OLED**
-  if (!display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR)) {
-    Serial.println("OLED gagal diinisialisasi!");
-    while (true);
-  }
+IRsend irsend(D4);
 
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(WHITE);
-  display.setCursor(0, 0);
-  display.println("Menghubungkan WiFi...");
-  display.display();
-
-  // **Koneksi WiFi**
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Menghubungkan ke WiFi...");
-  }
-
-  // **Tampilkan IP Address di OLED**
-  display.clearDisplay();
-  display.setCursor(0, 0);
-  display.println("WiFi Terhubung!");
-  display.print("IP: ");
-  display.println(WiFi.localIP());
-  display.display();
-  delay(2000);
-
-  dht.begin();
+void handleRoot() {
+ server.send(200, "text/html", 
+"<!DOCTYPE html>" \
+"<html>" \
+"<head>" \
+"<title>home</title>" \
+"</head>" \
+"<body>" \
+"<h1>Home Automation</h1>" \
+"<h2>"+ switch1name +": "+ switch1 +"</h2>" \
+"<p><a href=\"/Switch1OFF\"><button class=\"button\">OFF</button></a><a href=\"/Switch1ON\"><button class=\"button\">ON</button></a></p>" \
+"<h2>Fan: "+ Fan +"</h2>" \
+"<p><a href=\"/FanOFF\"><button class=\"button\">OFF</button></a><a href=\"/FanSpeed1\"><button class=\"button\">Speed1</button></a><a href=\"/FanSpeed2\"><button class=\"button\">Speed2</button></a><a href=\"/FanSpeed3\"><button class=\"button\">Speed3</button></a><a href=\"/FanSpeed4\"><button class=\"button\">Speed4</button></a></p>" \
+"<h2>Ac: "+ AC +"</h2>" \
+"<p><a href=\"/AcOFF\"><button class=\"button\">OFF</button></a><a href=\"/AcON\"><button class=\"button\">ON</button></a></p>" \
+"<p>Suhu: " + String(currentTemp) + "°C</p>" \
+"<p><a href=\"/TempDown\"><button class=\"button\">-</button></a><a href=\"/TempUp\"><button class=\"button\">+</button></a></p>" \
+"</body>" \
+"</html>" \
+);
 }
 
-void loop() {
-  if (millis() - lastUpdate >= updateInterval) {
-    bacaSensor();
-    updateDisplay();
-    kirimData();
-    lastUpdate = millis();
+void switch1ON(){
+  switch1 = "ON";
+  digitalWrite(D1, LOW);
+  handleRoot();
+}
+
+void switch1OFF(){
+  switch1 = "OFF";
+  digitalWrite(D1, HIGH);
+  handleRoot();
+}
+
+void FanOFF(){
+  Fan = "OFF";
+  digitalWrite(D5, HIGH);
+  digitalWrite(D6, HIGH);
+  digitalWrite(D7, HIGH);
+  handleRoot();
+}
+
+void FanSpeed1(){
+  Fan = "Speed1";
+  digitalWrite(D5, HIGH);
+  digitalWrite(D6, HIGH);
+  digitalWrite(D7, HIGH);
+  delay(500);
+  digitalWrite(D5, LOW);
+  handleRoot();
+}
+
+void FanSpeed2(){
+  Fan = "Speed2";
+  digitalWrite(D5, HIGH);
+  digitalWrite(D6, HIGH);
+  digitalWrite(D7, HIGH);
+  delay(500);
+  digitalWrite(D6, LOW);
+  handleRoot();
+}
+
+void FanSpeed3(){
+  Fan = "Speed3";
+  digitalWrite(D5, HIGH);
+  digitalWrite(D6, HIGH);
+  digitalWrite(D7, HIGH);
+  delay(500);
+  digitalWrite(D5, LOW);
+  digitalWrite(D6, LOW);
+  handleRoot();
+}
+
+void FanSpeed4(){
+  Fan = "Speed4";
+  digitalWrite(D5, HIGH);
+  digitalWrite(D6, HIGH);
+  digitalWrite(D7, HIGH);
+  delay(500);
+  digitalWrite(D7, LOW);
+  handleRoot();
+}
+
+void AcON(){
+  AC = "ON";
+  irsend.sendNEC(142607175, 28);
+  handleRoot();
+}
+
+void AcOFF(){
+  AC = "OFF";
+  irsend.sendNEC(143392849, 28);
+  handleRoot();
+}
+
+void sendAcTemp(int temp) {
+  // Contoh pakai suhu 24-30, sesuaikan kode IR berikut dengan remot AC kamu
+  switch (temp) {
+    case 24:
+      irsend.sendNEC(142607175, 28);
+      break;
+    case 25:
+      irsend.sendNEC(142639935, 28);
+      break;
+    case 26:
+      irsend.sendNEC(142672695, 28);
+      break;
+    case 27:
+      irsend.sendNEC(142705455, 28);
+      break;
+    case 28:
+      irsend.sendNEC(142738215, 28);
+      break;
+    case 29:
+      irsend.sendNEC(142770975, 28);
+      break;
+    case 30:
+      irsend.sendNEC(142803735, 28);
+      break;
+    default:
+      irsend.sendNEC(142607175, 28); // default ke 24
+      break;
   }
 }
 
-// **Fungsi membaca sensor**
-void bacaSensor() {
-  humi = dht.readHumidity();
-  temp = dht.readTemperature();
-  ppm = mq135_sensor.getPPM();
-
-  tempout = random(20, 35);
-  humiout = random(40, 80);
-  tempac = random(16, 30);
-  modeac = random(0, 3);
-
-  // **Cek validitas data sensor**
-  if (isnan(humi) || isnan(temp)) {
-    Serial.println("Gagal membaca DHT!");
-    display.clearDisplay();
-    display.setCursor(0, 0);
-    display.println("Gagal baca DHT!");
-    display.display();
-    return;
-  }
-
-  Serial.print("PPM: "); Serial.print(ppm);
-  Serial.print(" | Temp: "); Serial.print(temp);
-  Serial.print(" | Hum: "); Serial.println(humi);
-
-  Serial.print(" | TempOut: "); Serial.print(tempout);
-  Serial.print(" | HumiOut: "); Serial.print(humiout);
-  Serial.print(" | TempAC: "); Serial.print(tempac);
-  Serial.print(" | ModeAC: "); Serial.println(modeac);
+void TempUp() {
+  if (currentTemp < 30) currentTemp++;
+  sendAcTemp(currentTemp);
+  AC = "ON (" + String(currentTemp) + "°C)";
+  handleRoot();
 }
 
-// **Fungsi memperbarui OLED**
-void updateDisplay() {
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(WHITE);
+void TempDown() {
+  if (currentTemp > 24) currentTemp--;
+  sendAcTemp(currentTemp);
+  AC = "ON (" + String(currentTemp) + "°C)";
+  handleRoot();
+}
+
+
+
+void setup(void){
+  pinMode(D1, OUTPUT);
+  pinMode(D4, OUTPUT);
+  pinMode(D5, OUTPUT);
+  pinMode(D6, OUTPUT);
+  pinMode(D7, OUTPUT);
+  digitalWrite(D1, HIGH);
+  digitalWrite(D4, HIGH);
+  digitalWrite(D5, HIGH);
+  digitalWrite(D6, HIGH);
+  digitalWrite(D7, HIGH);
   
-  display.setCursor(0, 0);
-  display.print("PPM : ");
-  display.print(ppm);
-  display.println(" PPM");
+  Serial.begin(115200);
+  
+  WiFi.begin(ssid, password);
+  Serial.println("");
 
-  display.setCursor(0, 20);
-  display.print("Temp: ");
-  display.print(temp);
-  display.println(" C");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(200);
+    digitalWrite(D4, HIGH);
+    delay(200);
+    digitalWrite(D4, LOW);
+    Serial.print(".");
+  }
 
-  display.setCursor(0, 40);
-  display.print("Hum : ");
-  display.print(humi);
-  display.println(" %");
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP()); 
 
-  display.setCursor(0, 30);
-  display.print("Out T: "); display.print(tempout);
-  display.println(" C");
+  if(mdns.begin(Domain)){
+    Serial.println("MDNS Started: " + Domain + ".local/");
+  }
+ 
+  server.on("/", handleRoot);   
+  server.on("/Switch1ON", switch1ON);  
+  server.on("/Switch1OFF", switch1OFF);      
+  server.on("/FanOFF", FanOFF); 
+  server.on("/FanSpeed1", FanSpeed1);   
+  server.on("/FanSpeed2", FanSpeed2);
+  server.on("/FanSpeed3", FanSpeed3);
+  server.on("/FanSpeed4", FanSpeed4);  
+  server.on("/AcON", AcON);  
+  server.on("/AcOFF", AcOFF);     
+  server.on("/TempUp", TempUp);
+  server.on("/TempDown", TempDown);
 
-  display.setCursor(0, 40);
-  display.print("Out H: "); display.print(humiout);
-  display.println(" %");
-
-  display.setCursor(0, 50);
-  display.print("AC T: "); display.print(tempac);
-  display.print("C M:"); display.print(modeac);
-
-  display.setCursor(0, 56);
-  display.print("Rand: ");
-  display.print(randomValue);  // Menampilkan nilai random dari server
-
-  display.display();
+  server.begin();                 
+  Serial.println("HTTP server started");
+  digitalWrite(D4, LOW);
 }
 
-// **Fungsi mengirim data ke server**
-void kirimData() {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi terputus! Mencoba koneksi ulang...");
-    WiFi.reconnect();
-    return;
-  }
-
-  Serial.println("Mengirim data ke server...");
-  if (client.connect(server, serverPort)) {
-    String postData = "ppm=" + String(ppm) + "&temp=" + String(temp) + "&humi=" + String(humi) + 
-                      "&tempout=" + String(tempout) + "&humiout=" + String(humiout) + 
-                      "&tempac=" + String(tempac) + "&modeac=" + String(modeac);
-
-    client.println("POST /iot/sensorsmartac/api/receive/ HTTP/1.1");
-    client.println("Host: " + String(server));
-    client.println("Content-Type: application/x-www-form-urlencoded");
-    client.print("Content-Length: ");
-    client.println(postData.length());
-    client.println();
-    client.println(postData);
-
-    // Tunggu respons dari server
-    delay(500);
-    String response = "";
-    while (client.available()) {
-      char c = client.read();
-      response += c;
-    }
-    Serial.println("Response dari server: " + response);
-
-    // **Tampilkan "Data Terkirim!" di OLED**
-    display.clearDisplay();
-    display.setTextSize(1);
-    display.setTextColor(WHITE);
-    display.setCursor(0, 56);
-    display.println("Data Terkirim!");
-    display.display();
-
-    // Tunggu 2 detik sebelum mengganti dengan nilai random
-    delay(2000);
-
-    // **Panggil fungsi untuk mengekstrak nilai random**
-    terimaNilaiRandom(response);
-
-    // **Tampilkan nilai random setelah 2 detik**
-    updateDisplay();
-
-  } else {
-    Serial.println("Gagal terhubung ke server!");
-    display.setCursor(0, 56);
-    display.println("Gagal Koneksi!");
-    display.display();
-  }
-
-  client.stop();
-}
-
-// **Fungsi untuk mengekstrak nilai random dari respons JSON**
-void terimaNilaiRandom(String response) {
-  int pos = response.indexOf("\"nilai_random\":");
-  if (pos != -1) {
-    int start = pos + 15;
-    int end = response.indexOf("}", start);
-    if (end == -1) end = response.length();
-    String randomStr = response.substring(start, end);
-    randomValue = randomStr.toInt();  // Konversi ke integer
-  } else {
-    Serial.println("Nilai random tidak ditemukan dalam respons!");
-  }
-
-  Serial.print("Nilai Random dari server: ");
-  Serial.println(randomValue);
+void loop(void){
+  mdns.update();
+  server.handleClient();  
 }
